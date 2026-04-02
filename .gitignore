@@ -1,0 +1,16 @@
+# Logs
+logs/
+
+# Environnement
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Playwright
+.playwright/
+
+# VS Code
+.vscode/
