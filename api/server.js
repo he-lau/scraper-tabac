@@ -1,11 +1,15 @@
+const PORT = 8000;
 const express = require("express");
+const listingRoutes = require("./routes/listingRoutes");
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("API OK");
-});
+app.use(express.json());
 
-const PORT = 8000;
+app.use("api/listings", listingRoutes);
+
+app.use((req, res) => {
+    res.status(404).send('Page not found');
+})
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
