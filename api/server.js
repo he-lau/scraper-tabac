@@ -2,7 +2,9 @@ const PORT = 8000;
 const express = require("express");
 const listingRoutes = require("./routes/listingRoutes");
 const app = express();
+const limiter = require("./middlewares/rateLimiter");
 
+app.use(limiter);
 app.use(express.json());
 
 app.use("/api", listingRoutes);

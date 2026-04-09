@@ -2,6 +2,8 @@ docker compose down -v
 docker compose build --no-cache
 docker compose up
 docker compose up --build -d
+docker compose build api
+docker compose up --build -d api
 
 docker compose run scraper sh
 docker compose run test python main.py
