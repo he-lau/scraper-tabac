@@ -5,7 +5,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use("api/listings", listingRoutes);
+app.use("/api", listingRoutes);
 
 app.use((req, res) => {
     res.status(404).send('Page not found');

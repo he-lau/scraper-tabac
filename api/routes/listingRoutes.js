@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/listingController");
 
-router.get("/", controller.getListings);
-//router.post("/", controller.createListing);
+router.get("/listings", controller.getListings);
+router.get("/listings/:id", controller.getListingById);
 
 module.exports = router;
