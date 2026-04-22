@@ -42,4 +42,8 @@ export default {
 
   badgeNew:       "最新",
   badgeRecent:    "近期",
+
+  emptyTitle:     "无结果",
+  emptySubtitle:  "没有符合筛选条件的公告。",
+  emptyReset:     "重置筛选条件",
 };

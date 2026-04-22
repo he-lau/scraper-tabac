@@ -24,8 +24,8 @@ function FreshBadge({ date }) {
   const f = getFreshness(date);
   if (!f) return null;
   return f === "new"
-    ? <span className="inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-700 border border-emerald-200 leading-none">{t.badgeNew}</span>
-    : <span className="inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-600 border border-amber-200 leading-none">{t.badgeRecent}</span>;
+    ? <span className="self-start text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-700 border border-emerald-200 leading-none">{t.badgeNew}</span>
+    : <span className="self-start text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-600 border border-amber-200 leading-none">{t.badgeRecent}</span>;
 }
 
 function SourceBadge({ source }) {
@@ -68,7 +68,7 @@ function ExpandedDetail({ listing }) {
           href={listing.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-[#1a55b0] text-[12px] font-medium no-underline"
+          className="btn-sm-primary no-underline"
         >
           {t.seeAd}
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -139,7 +139,7 @@ function ExpandedRow({ listing }) {
               href={listing.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[#1a55b0] text-[12px] font-medium no-underline mt-1"
+              className="btn-sm-primary no-underline self-start mt-1"
             >
               {t.seeAd}
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">

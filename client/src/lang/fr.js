@@ -42,4 +42,8 @@ export default {
 
   badgeNew:       "Nouveau",
   badgeRecent:    "Récent",
+
+  emptyTitle:     "Aucun résultat",
+  emptySubtitle:  "Aucune annonce ne correspond à vos filtres.",
+  emptyReset:     "Réinitialiser les filtres",
 };

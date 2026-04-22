@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .btn {
+    @apply inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-[13px] font-medium cursor-pointer border transition-colors;
+  }
+  .btn-primary {
+    @apply btn bg-[#1a1a1a] text-white border-[#1a1a1a] hover:bg-[#333] hover:border-[#333];
+  }
+  .btn-secondary {
+    @apply btn bg-white text-[#1a1a1a] border-[#E5E5E0] hover:bg-[#F7F7F5] hover:border-[#1a1a1a];
+  }
+  .btn-sm {
+    @apply btn px-3 py-1.5 text-[12px];
+  }
+  .btn-sm-primary {
+    @apply btn-sm bg-[#1a1a1a] text-white border-[#1a1a1a] hover:bg-[#333];
+  }
+  .btn-sm-secondary {
+    @apply btn-sm bg-white text-[#1a1a1a] border-[#E5E5E0] hover:bg-[#F7F7F5] hover:border-[#1a1a1a];
+  }
+}
+
 .range-thumb {
   @apply appearance-none bg-transparent cursor-pointer w-full absolute;
 }

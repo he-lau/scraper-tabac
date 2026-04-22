@@ -66,20 +66,14 @@ export default function App() {
           <h1 className="text-[26px] font-semibold tracking-tight m-0">{t.title}</h1>
         </div>
         <div className="flex gap-2.5 items-center">
-          <button
-            className="flex items-center gap-1.5 border border-[#E5E5E0] rounded-lg px-4 py-2 text-[13px] font-medium cursor-pointer bg-white text-[#1a1a1a]"
-            onClick={refetch}
-          >
+          <button className="btn-secondary" onClick={refetch}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polyline points="23 4 23 10 17 10" /><polyline points="1 20 1 14 7 14" />
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
             {t.refresh}
           </button>
-          <button
-            className="flex items-center gap-1.5 border-0 rounded-lg px-4 py-2 text-[13px] font-medium cursor-pointer bg-[#1a1a1a] text-white"
-            onClick={() => exportCSV(filtered)}
-          >
+          <button className="btn-primary" onClick={() => exportCSV(filtered)}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
             </svg>
@@ -131,7 +125,7 @@ export default function App() {
               {totalPages > 1 && ` · ${t.page(page, totalPages)}`}
             </p>
             <button
-              className={`relative flex items-center gap-1.5 rounded-lg px-4 py-2 text-[13px] font-medium cursor-pointer border transition-colors ${activeCount > 0 ? "bg-[#1a1a1a] text-white border-[#1a1a1a]" : "bg-white text-[#1a1a1a] border-[#C0C0BB] hover:border-[#1a1a1a]"}`}
+              className={`relative btn ${activeCount > 0 ? "btn-primary" : "btn-secondary"}`}
               onClick={() => setModalOpen(true)}
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -145,8 +139,28 @@ export default function App() {
               )}
             </button>
           </div>
-          <ListingsTable listings={paginated} />
-          <Pagination page={page} totalPages={totalPages} onChange={(p) => set({ page: p })} />
+          {filtered.length === 0 && activeCount > 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 gap-4 border border-[#E5E5E0] rounded-xl">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5">
+                <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <div className="text-center">
+                <p className="text-[15px] font-semibold m-0">{t.emptyTitle}</p>
+                <p className="text-[13px] text-[#888] mt-1 mb-0">{t.emptySubtitle}</p>
+              </div>
+              <button
+                className="btn-secondary"
+                onClick={() => set({ search: "", sourceFilter: "all", sortBy: "date", priceMin: "", priceMax: "", page: 1 })}
+              >
+                {t.emptyReset}
+              </button>
+            </div>
+          ) : (
+            <>
+              <ListingsTable listings={paginated} />
+              <Pagination page={page} totalPages={totalPages} onChange={(p) => set({ page: p })} />
+            </>
+          )}
         </>
       )}
     </div>
