@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.range-thumb {
+  @apply appearance-none bg-transparent cursor-pointer w-full absolute;
+}
+.range-thumb::-webkit-slider-runnable-track {
+  height: 0;
+  background: transparent;
+}
+.range-thumb::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px #1a1a1a;
+  cursor: pointer;
+  margin-top: -6px;
+}
+.range-thumb::-moz-range-track {
+  height: 0;
+  background: transparent;
+}
+.range-thumb::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px #1a1a1a;
+  cursor: pointer;
+}
