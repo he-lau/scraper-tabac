@@ -15,7 +15,6 @@ const NAV = [
   {
     key: "stats",
     labelKey: "navStats",
-    disabled: true,
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
@@ -36,9 +35,8 @@ const NAV = [
   },
 ];
 
-export default function DashboardLayout({ children, title, actions }) {
+export default function DashboardLayout({ children, title, actions, active, onNavChange }) {
   const { t, lang, toggle } = useT();
-  const [active, setActive] = useState("listings");
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -58,7 +56,7 @@ export default function DashboardLayout({ children, title, actions }) {
             <button
               key={key}
               disabled={disabled}
-              onClick={() => !disabled && setActive(key)}
+              onClick={() => !disabled && onNavChange(key)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium text-left transition-colors
                 ${disabled ? "text-[#444] cursor-not-allowed" :
                   active === key ? "bg-white text-[#111]" : "text-[#999] hover:text-white hover:bg-[#1a1a1a] cursor-pointer"

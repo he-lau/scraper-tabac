@@ -8,6 +8,7 @@ import StatsBar from "./components/StatsBar";
 import FiltersModal from "./components/FiltersModal";
 import ListingsTable from "./components/ListingsTable";
 import Pagination from "./components/Pagination";
+import StatsPage from "./components/StatsPage";
 import { exportCSV } from "./utils/exportCSV";
 
 const PAGE_SIZE = 20;
@@ -16,6 +17,7 @@ export default function App() {
   const { listings, loading, error, refetch } = useListings();
   const [{ search, sourceFilter, sortBy, page, priceMin, priceMax }, set] = useUrlState();
   const [modalOpen, setModalOpen] = useState(false);
+  const [activePage, setActivePage] = useState("listings");
   const { t } = useT();
 
   const resetFilters = () => set({ search: "", sourceFilter: "all", sortBy: "date", priceMin: "", priceMax: "", page: 1 });
@@ -80,31 +82,38 @@ export default function App() {
     </>
   );
 
-  return (
-    <DashboardLayout title={t.navListings} actions={headerActions}>
-      <FiltersModal
-        open={modalOpen} onClose={() => setModalOpen(false)}
-        search={search}             onSearch={(v) => set({ search: v, page: 1 })}
-        sourceFilter={sourceFilter} onSourceFilter={(v) => set({ sourceFilter: v, page: 1 })}
-        sortBy={sortBy}             onSortBy={(v) => set({ sortBy: v, page: 1 })}
-        priceMin={priceMin}         onPriceMin={(v) => set({ priceMin: v, page: 1 })}
-        priceMax={priceMax}         onPriceMax={(v) => set({ priceMax: v, page: 1 })}
-        priceBounds={priceBounds}
-        sources={sources}
-        activeCount={activeCount}
-        onReset={resetFilters}
-      />
+  const pageTitle = activePage === "stats" ? t.navStats : t.navListings;
+  const pageActions = activePage === "listings" ? headerActions : null;
 
-      {error && (
+  return (
+    <DashboardLayout title={pageTitle} actions={pageActions} active={activePage} onNavChange={setActivePage}>
+      {activePage === "listings" && (
+        <FiltersModal
+          open={modalOpen} onClose={() => setModalOpen(false)}
+          search={search}             onSearch={(v) => set({ search: v, page: 1 })}
+          sourceFilter={sourceFilter} onSourceFilter={(v) => set({ sourceFilter: v, page: 1 })}
+          sortBy={sortBy}             onSortBy={(v) => set({ sortBy: v, page: 1 })}
+          priceMin={priceMin}         onPriceMin={(v) => set({ priceMin: v, page: 1 })}
+          priceMax={priceMax}         onPriceMax={(v) => set({ priceMax: v, page: 1 })}
+          priceBounds={priceBounds}
+          sources={sources}
+          activeCount={activeCount}
+          onReset={resetFilters}
+        />
+      )}
+
+      {activePage === "stats" && <StatsPage listings={listings} loading={loading} />}
+
+      {activePage === "listings" && error && (
         <div className="bg-[#FFF0F0] border border-[#F5BFBF] rounded-lg px-4 py-3 text-[#B00] text-[13px] mb-4">
           ⚠ {t.errorLoad} : {error}
         </div>
       )}
-      {loading && (
+      {activePage === "listings" && loading && (
         <div className="text-center py-20 text-[#aaa] text-[13px] font-mono">{t.loading}</div>
       )}
 
-      {!loading && !error && (
+      {activePage === "listings" && !loading && !error && (
         <div className="flex gap-6 items-start">
 
           <Sidebar

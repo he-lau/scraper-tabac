@@ -50,4 +50,15 @@ export default {
   emptyTitle:     "Aucun résultat",
   emptySubtitle:  "Aucune annonce ne correspond à vos filtres.",
   emptyReset:     "Réinitialiser les filtres",
+
+  statWithPrice:  "Avec prix",
+  statAnn:        "ann.",
+  statLast7:      "cette semaine",
+  statLast30:     "ce mois",
+  statBySrc:      "Par source",
+  statSrcShare:   "Répartition des sources",
+  statPriceDist:  "Distribution des prix",
+  statByRegion:   "Top régions",
+  statByDep:      "Top départements",
+  statTimeline:   "Annonces scrappées (30 derniers jours)",
 };
