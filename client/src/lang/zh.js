@@ -42,4 +42,23 @@ export default {
 
   badgeNew:       "最新",
   badgeRecent:    "近期",
+
+  navListings:    "公告列表",
+  navStats:       "统计",
+  navSettings:    "设置",
+
+  emptyTitle:     "无结果",
+  emptySubtitle:  "没有符合筛选条件的公告。",
+  emptyReset:     "重置筛选条件",
+
+  statWithPrice:  "有价格",
+  statAnn:        "条",
+  statLast7:      "本周新增",
+  statLast30:     "本月新增",
+  statBySrc:      "按来源",
+  statSrcShare:   "来源占比",
+  statPriceDist:  "价格分布",
+  statByRegion:   "热门大区",
+  statByDep:      "热门省份",
+  statTimeline:   "近30天抓取数量",
 };

@@ -1,4 +1,5 @@
 export default function Pagination({ page, totalPages, onChange }) {
+  const handleChange = (p) => { onChange(p); window.scrollTo({ top: 0, behavior: "smooth" }); };
   if (totalPages <= 1) return null;
 
   const pages = [];
@@ -18,9 +19,9 @@ export default function Pagination({ page, totalPages, onChange }) {
   return (
     <div className="flex items-center justify-center gap-1 mt-6">
       <button
-        onClick={() => onChange(page - 1)}
+        onClick={() => handleChange(page - 1)}
         disabled={page === 1}
-        className="px-3 py-1.5 rounded-lg text-[13px] border border-[#E5E5E0] bg-white text-[#1a1a1a] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-[#F7F7F5]"
+        className="btn-sm-secondary disabled:opacity-30 disabled:cursor-not-allowed"
       >
         ←
       </button>
@@ -31,12 +32,8 @@ export default function Pagination({ page, totalPages, onChange }) {
         ) : (
           <button
             key={p}
-            onClick={() => onChange(p)}
-            className={`px-3 py-1.5 rounded-lg text-[13px] border cursor-pointer ${
-              p === page
-                ? "bg-[#1a1a1a] text-white border-[#1a1a1a]"
-                : "border-[#E5E5E0] bg-white text-[#1a1a1a] hover:bg-[#F7F7F5]"
-            }`}
+            onClick={() => handleChange(p)}
+            className={p === page ? "btn-sm-primary" : "btn-sm-secondary"}
           >
             {p}
           </button>
@@ -44,9 +41,9 @@ export default function Pagination({ page, totalPages, onChange }) {
       )}
 
       <button
-        onClick={() => onChange(page + 1)}
+        onClick={() => handleChange(page + 1)}
         disabled={page === totalPages}
-        className="px-3 py-1.5 rounded-lg text-[13px] border border-[#E5E5E0] bg-white text-[#1a1a1a] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-[#F7F7F5]"
+        className="btn-sm-secondary disabled:opacity-30 disabled:cursor-not-allowed"
       >
         →
       </button>

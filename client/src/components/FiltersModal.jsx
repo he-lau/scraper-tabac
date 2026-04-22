@@ -106,7 +106,7 @@ export default function FiltersModal({
 
         <button
           onClick={onClose}
-          className="mt-1 w-full h-10 bg-[#1a1a1a] text-white rounded-lg text-[13px] font-medium cursor-pointer"
+          className="btn-primary w-full justify-center mt-1"
         >
           {t.seeResults}
         </button>
