@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { fmtPrice, fmtDate, truncate } from "../utils/format";
+import { fmtPrice, fmtDate, truncate, getFreshness } from "../utils/format";
+import { useT } from "../lang/LanguageContext";
 
 const SOURCE_COLORS = {
   huarenjie: { bg: "#FFF0E6", text: "#C05010", border: "#F5C09A" },
@@ -16,6 +17,15 @@ function useIsMobile() {
     return () => window.removeEventListener("resize", handler);
   }, []);
   return isMobile;
+}
+
+function FreshBadge({ date }) {
+  const { t } = useT();
+  const f = getFreshness(date);
+  if (!f) return null;
+  return f === "new"
+    ? <span className="inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-700 border border-emerald-200 leading-none">{t.badgeNew}</span>
+    : <span className="inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-600 border border-amber-200 leading-none">{t.badgeRecent}</span>;
 }
 
 function SourceBadge({ source }) {
@@ -42,16 +52,17 @@ function Field({ label, value, mono }) {
 }
 
 function ExpandedDetail({ listing }) {
+  const { t } = useT();
   return (
     <div className="bg-[#F2F2EE] rounded-lg p-4 mt-2.5 flex flex-col gap-2.5">
       <div>
-        <p className="text-[11px] text-[#888] uppercase tracking-[0.08em] font-semibold mb-1.5 mt-0">Description</p>
+        <p className="text-[11px] text-[#888] uppercase tracking-[0.08em] font-semibold mb-1.5 mt-0">{t.description}</p>
         <p className="text-[12.5px] text-[#444] leading-[1.65] m-0">{truncate(listing.description)}</p>
       </div>
       <div className="flex flex-col gap-2">
-        {listing.region     && <Field label="Région"      value={listing.region} />}
-        {listing.department && <Field label="Département" value={listing.department} />}
-        {listing.address    && <Field label="Adresse"     value={listing.address} />}
+        {listing.region     && <Field label={t.region}     value={listing.region} />}
+        {listing.department && <Field label={t.department} value={listing.department} />}
+        {listing.address    && <Field label={t.address}    value={listing.address} />}
         <Field label="ID" value={`#${listing.id}`} mono />
         <a
           href={listing.url}
@@ -59,7 +70,7 @@ function ExpandedDetail({ listing }) {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 text-[#1a55b0] text-[12px] font-medium no-underline"
         >
-          Voir l'annonce
+          {t.seeAd}
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
             <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
@@ -80,7 +91,10 @@ function MobileCard({ listing, expanded, onToggle }) {
       onClick={onToggle}
     >
       <div className="flex justify-between items-start gap-2.5">
-        <p className="font-medium text-[13px] leading-[1.45] flex-1 m-0">{listing.title}</p>
+        <div className="flex flex-col gap-1 flex-1">
+          <p className="font-medium text-[13px] leading-[1.45] m-0">{listing.title}</p>
+          <FreshBadge date={listing.created_at} />
+        </div>
         <svg
           className={`flex-shrink-0 text-[#aaa] transition-transform mt-0.5 ${expanded ? "rotate-180" : ""}`}
           width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
@@ -107,18 +121,19 @@ function MobileCard({ listing, expanded, onToggle }) {
 // ─── Vue desktop : tableau ─────────────────────────────────────────────────
 
 function ExpandedRow({ listing }) {
+  const { t } = useT();
   return (
     <tr>
       <td colSpan={6} className="px-3.5 pb-4 bg-[#FAFAF8]">
         <div className="bg-[#F2F2EE] rounded-lg p-4 grid grid-cols-2 gap-x-6 gap-y-2.5">
           <div>
-            <p className="text-[11px] text-[#888] uppercase tracking-[0.08em] font-semibold mb-1.5 mt-0">Description</p>
+            <p className="text-[11px] text-[#888] uppercase tracking-[0.08em] font-semibold mb-1.5 mt-0">{t.description}</p>
             <p className="text-[12.5px] text-[#444] leading-[1.65] m-0">{truncate(listing.description)}</p>
           </div>
           <div className="flex flex-col gap-2.5">
-            {listing.region     && <Field label="Région"      value={listing.region} />}
-            {listing.department && <Field label="Département" value={listing.department} />}
-            {listing.address    && <Field label="Adresse"     value={listing.address} />}
+            {listing.region     && <Field label={t.region}     value={listing.region} />}
+            {listing.department && <Field label={t.department} value={listing.department} />}
+            {listing.address    && <Field label={t.address}    value={listing.address} />}
             <Field label="ID" value={`#${listing.id}`} mono />
             <a
               href={listing.url}
@@ -126,7 +141,7 @@ function ExpandedRow({ listing }) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-[#1a55b0] text-[12px] font-medium no-underline mt-1"
             >
-              Voir l'annonce
+              {t.seeAd}
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                 <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
@@ -146,19 +161,20 @@ const TH = ({ children }) => (
 );
 
 function DesktopTable({ listings, expanded, toggle }) {
+  const { t } = useT();
   return (
     <div className="border border-[#E8E8E3] rounded-xl overflow-hidden">
       <table className="w-full border-collapse text-[13px]">
         <thead className="bg-[#F7F7F5] border-b border-[#E8E8E3]">
           <tr>
-            <TH>Titre</TH><TH>Prix</TH><TH>Localisation</TH><TH>Source</TH><TH>Date</TH><TH />
+            <TH>{t.colTitle}</TH><TH>{t.colPrice}</TH><TH>{t.colLocation}</TH><TH>{t.colSource}</TH><TH>{t.colDate}</TH><TH />
           </tr>
         </thead>
         <tbody>
           {listings.length === 0 && (
             <tr>
               <td colSpan={6} className="py-10 text-center text-[#aaa] text-[13px]">
-                Aucune annonce trouvée
+                {t.noListings}
               </td>
             </tr>
           )}
@@ -175,8 +191,11 @@ function DesktopTable({ listings, expanded, toggle }) {
                 }`}
               >
                 <td className="px-3.5 py-3 max-w-[340px]">
-                  <div className="font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[320px]">
-                    {l.title}
+                  <div className="flex items-center gap-2">
+                    <div className="font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[280px]">
+                      {l.title}
+                    </div>
+                    <FreshBadge date={l.created_at} />
                   </div>
                 </td>
                 <td className="px-3.5 py-3 font-mono font-medium whitespace-nowrap">
@@ -211,6 +230,7 @@ function DesktopTable({ listings, expanded, toggle }) {
 
 export default function ListingsTable({ listings }) {
   const [expanded, setExpanded] = useState(null);
+  const { t } = useT();
   const isMobile = useIsMobile();
   const toggle = (id) => setExpanded((prev) => (prev === id ? null : id));
 
@@ -218,7 +238,7 @@ export default function ListingsTable({ listings }) {
     return (
       <div>
         {listings.length === 0 && (
-          <p className="text-center py-10 text-[#aaa] text-[13px]">Aucune annonce trouvée</p>
+          <p className="text-center py-10 text-[#aaa] text-[13px]">{t.noListings}</p>
         )}
         {listings.map((l) => (
           <MobileCard key={l.id} listing={l} expanded={expanded === l.id} onToggle={() => toggle(l.id)} />

@@ -1,6 +1,8 @@
 import { fmtPrice } from "../utils/format";
+import { useT } from "../lang/LanguageContext";
 
 export default function StatsBar({ listings }) {
+  const { t } = useT();
   const prices = listings.filter((l) => l.price).map((l) => l.price);
   const avgPrice = prices.length ? Math.round(prices.reduce((a, b) => a + b, 0) / prices.length) : 0;
   const maxPrice = prices.length ? Math.max(...prices) : 0;
@@ -8,13 +10,13 @@ export default function StatsBar({ listings }) {
   const sources = [...new Set(listings.map((l) => l.source))];
   const sourceCounts = sources.map((src) => ({
     label: src,
-    value: listings.filter((l) => l.source === src).length + " ann.",
+    value: listings.filter((l) => l.source === src).length + " " + t.ann,
   }));
 
   const stats = [
-    { label: "Total", value: listings.length },
-    { label: "Prix moyen", value: fmtPrice(avgPrice) },
-    { label: "Prix max", value: fmtPrice(maxPrice) },
+    { label: t.statTotal,    value: listings.length },
+    { label: t.statAvgPrice, value: fmtPrice(avgPrice) },
+    { label: t.statMaxPrice, value: fmtPrice(maxPrice) },
     ...sourceCounts,
   ];
 
