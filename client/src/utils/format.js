@@ -15,6 +15,13 @@ export function fmtDate(iso) {
   });
 }
 
+export function getFreshness(iso) {
+  const hours = (Date.now() - new Date(iso)) / 36e5;
+  if (hours < 24)  return "new";
+  if (hours < 48)  return "recent";
+  return null;
+}
+
 export function truncate(str, max = 280) {
   if (!str) return "";
   return str.length > max ? str.slice(0, max) + "…" : str;
