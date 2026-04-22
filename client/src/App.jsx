@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { useListings } from "./hooks/useListings";
 import { useUrlState } from "./hooks/useUrlState";
 import { useT } from "./lang/LanguageContext";
+import DashboardLayout from "./components/DashboardLayout";
+import Sidebar from "./components/Sidebar";
 import StatsBar from "./components/StatsBar";
 import FiltersModal from "./components/FiltersModal";
 import ListingsTable from "./components/ListingsTable";
@@ -14,7 +16,9 @@ export default function App() {
   const { listings, loading, error, refetch } = useListings();
   const [{ search, sourceFilter, sortBy, page, priceMin, priceMax }, set] = useUrlState();
   const [modalOpen, setModalOpen] = useState(false);
-  const { t, lang, toggle } = useT();
+  const { t } = useT();
+
+  const resetFilters = () => set({ search: "", sourceFilter: "all", sortBy: "date", priceMin: "", priceMax: "", page: 1 });
 
   const activeCount = [
     search !== "",
@@ -58,50 +62,26 @@ export default function App() {
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
+  const headerActions = (
+    <>
+      <button className="btn-secondary" onClick={refetch}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <polyline points="23 4 23 10 17 10" /><polyline points="1 20 1 14 7 14" />
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+        </svg>
+        <span className="hidden sm:inline">{t.refresh}</span>
+      </button>
+      <button className="btn-primary" onClick={() => exportCSV(filtered)}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        <span className="hidden sm:inline">{t.export} ({filtered.length})</span>
+      </button>
+    </>
+  );
+
   return (
-    <div className="max-w-[1100px] mx-auto px-6 py-8 text-[#1a1a1a]">
-      <div className="flex items-end justify-between flex-wrap gap-3 mb-8">
-        <div>
-          <p className="text-[11px] font-mono text-[#888] tracking-[0.1em] uppercase mb-1">{t.eyebrow}</p>
-          <h1 className="text-[26px] font-semibold tracking-tight m-0">{t.title}</h1>
-        </div>
-        <div className="flex gap-2.5 items-center">
-          <button className="btn-secondary" onClick={refetch}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <polyline points="23 4 23 10 17 10" /><polyline points="1 20 1 14 7 14" />
-              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
-            </svg>
-            {t.refresh}
-          </button>
-          <button className="btn-primary" onClick={() => exportCSV(filtered)}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            {t.export} ({filtered.length})
-          </button>
-          <div className="flex items-center border border-[#E5E5E0] rounded-lg overflow-hidden text-[12px] font-medium ml-auto">
-            {["fr", "zh"].map((l) => (
-              <button
-                key={l}
-                onClick={() => l !== lang && toggle()}
-                className={`px-3 py-1.5 cursor-pointer transition-colors ${lang === l ? "bg-[#1a1a1a] text-white" : "bg-white text-[#888] hover:text-[#1a1a1a]"}`}
-              >
-                {l === "fr" ? "FR" : "中文"}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {error && (
-        <div className="bg-[#FFF0F0] border border-[#F5BFBF] rounded-lg px-4 py-3 text-[#B00] text-[13px] mb-6">
-          ⚠ {t.errorLoad} : {error}
-        </div>
-      )}
-      {loading && (
-        <div className="text-center py-16 text-[#aaa] text-[13px] font-mono">{t.loading}</div>
-      )}
-
+    <DashboardLayout title={t.navListings} actions={headerActions}>
       <FiltersModal
         open={modalOpen} onClose={() => setModalOpen(false)}
         search={search}             onSearch={(v) => set({ search: v, page: 1 })}
@@ -112,57 +92,75 @@ export default function App() {
         priceBounds={priceBounds}
         sources={sources}
         activeCount={activeCount}
-        onReset={() => set({ search: "", sourceFilter: "all", sortBy: "date", priceMin: "", priceMax: "", page: 1 })}
+        onReset={resetFilters}
       />
 
+      {error && (
+        <div className="bg-[#FFF0F0] border border-[#F5BFBF] rounded-lg px-4 py-3 text-[#B00] text-[13px] mb-4">
+          ⚠ {t.errorLoad} : {error}
+        </div>
+      )}
+      {loading && (
+        <div className="text-center py-20 text-[#aaa] text-[13px] font-mono">{t.loading}</div>
+      )}
+
       {!loading && !error && (
-        <>
-          <StatsBar listings={listings} />
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-[12px] text-[#999] font-mono m-0">
-              {t.results(filtered.length)}
-              {activeCount > 0 ? ` · ${t.filtered}` : ""}
-              {totalPages > 1 && ` · ${t.page(page, totalPages)}`}
-            </p>
-            <button
-              className={`relative btn ${activeCount > 0 ? "btn-primary" : "btn-secondary"}`}
-              onClick={() => setModalOpen(true)}
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <line x1="4" y1="6" x2="20" y2="6" /><line x1="8" y1="12" x2="16" y2="12" /><line x1="11" y1="18" x2="13" y2="18" />
-              </svg>
-              {t.filters}
-              {activeCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-white text-[#1a1a1a] text-[10px] flex items-center justify-center font-semibold border border-[#1a1a1a]">
-                  {activeCount}
-                </span>
-              )}
-            </button>
-          </div>
-          {filtered.length === 0 && activeCount > 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 gap-4 border border-[#E5E5E0] rounded-xl">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5">
-                <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-              <div className="text-center">
-                <p className="text-[15px] font-semibold m-0">{t.emptyTitle}</p>
-                <p className="text-[13px] text-[#888] mt-1 mb-0">{t.emptySubtitle}</p>
-              </div>
+        <div className="flex gap-6 items-start">
+
+          <Sidebar
+            listings={listings}
+            activeCount={activeCount}
+            onOpenFilters={() => setModalOpen(true)}
+          />
+
+          <div className="flex-1 min-w-0">
+            {/* Stats mobile */}
+            <div className="lg:hidden mb-4">
+              <StatsBar listings={listings} />
+            </div>
+
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[12px] text-[#999] font-mono m-0">
+                {t.results(filtered.length)}
+                {activeCount > 0 ? ` · ${t.filtered}` : ""}
+                {totalPages > 1 && ` · ${t.page(page, totalPages)}`}
+              </p>
               <button
-                className="btn-secondary"
-                onClick={() => set({ search: "", sourceFilter: "all", sortBy: "date", priceMin: "", priceMax: "", page: 1 })}
+                className={`relative btn lg:hidden ${activeCount > 0 ? "btn-primary" : "btn-secondary"}`}
+                onClick={() => setModalOpen(true)}
               >
-                {t.emptyReset}
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="4" y1="6" x2="20" y2="6" /><line x1="8" y1="12" x2="16" y2="12" /><line x1="11" y1="18" x2="13" y2="18" />
+                </svg>
+                {t.filters}
+                {activeCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-white text-[#1a1a1a] text-[10px] flex items-center justify-center font-semibold border border-[#1a1a1a]">
+                    {activeCount}
+                  </span>
+                )}
               </button>
             </div>
-          ) : (
-            <>
-              <ListingsTable listings={paginated} />
-              <Pagination page={page} totalPages={totalPages} onChange={(p) => set({ page: p })} />
-            </>
-          )}
-        </>
+
+            {filtered.length === 0 && activeCount > 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 gap-4 border border-[#E5E5E0] rounded-xl bg-white">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5">
+                  <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <div className="text-center">
+                  <p className="text-[15px] font-semibold m-0">{t.emptyTitle}</p>
+                  <p className="text-[13px] text-[#888] mt-1 mb-0">{t.emptySubtitle}</p>
+                </div>
+                <button className="btn-secondary" onClick={resetFilters}>{t.emptyReset}</button>
+              </div>
+            ) : (
+              <>
+                <ListingsTable listings={paginated} />
+                <Pagination page={page} totalPages={totalPages} onChange={(p) => set({ page: p })} />
+              </>
+            )}
+          </div>
+        </div>
       )}
-    </div>
+    </DashboardLayout>
   );
 }

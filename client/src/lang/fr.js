@@ -43,6 +43,10 @@ export default {
   badgeNew:       "Nouveau",
   badgeRecent:    "Récent",
 
+  navListings:    "Annonces",
+  navStats:       "Statistiques",
+  navSettings:    "Paramètres",
+
   emptyTitle:     "Aucun résultat",
   emptySubtitle:  "Aucune annonce ne correspond à vos filtres.",
   emptyReset:     "Réinitialiser les filtres",
