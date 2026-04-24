@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useT } from "../lang/LanguageContext";
 
 const NAV = [
   {
     key: "listings",
+    path: "/",
     labelKey: "navListings",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -14,6 +16,7 @@ const NAV = [
   },
   {
     key: "stats",
+    path: "/stats",
     labelKey: "navStats",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -24,6 +27,7 @@ const NAV = [
   },
   {
     key: "settings",
+    path: null,
     labelKey: "navSettings",
     disabled: true,
     icon: (
@@ -35,8 +39,9 @@ const NAV = [
   },
 ];
 
-export default function DashboardLayout({ children, title, actions, active, onNavChange }) {
+export default function DashboardLayout({ children, title, actions }) {
   const { t, lang, toggle } = useT();
+  const { pathname } = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -52,21 +57,26 @@ export default function DashboardLayout({ children, title, actions, active, onNa
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 flex flex-col gap-1">
-          {NAV.map(({ key, labelKey, icon, disabled }) => (
-            <button
-              key={key}
-              disabled={disabled}
-              onClick={() => !disabled && onNavChange(key)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium text-left transition-colors
-                ${disabled ? "text-[#444] cursor-not-allowed" :
-                  active === key ? "bg-white text-[#111]" : "text-[#999] hover:text-white hover:bg-[#1a1a1a] cursor-pointer"
-                }`}
-            >
-              {icon}
-              {t[labelKey]}
-              {disabled && <span className="ml-auto text-[10px] text-[#333] font-mono">soon</span>}
-            </button>
-          ))}
+          {NAV.map(({ key, path, labelKey, icon, disabled }) => {
+            const isActive = path === "/" ? pathname === "/" : pathname.startsWith(path);
+            const cls = `w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium text-left transition-colors ${
+              disabled ? "text-[#444] cursor-not-allowed" :
+              isActive ? "bg-white text-[#111]" : "text-[#999] hover:text-white hover:bg-[#1a1a1a] cursor-pointer"
+            }`;
+            if (disabled) {
+              return (
+                <button key={key} disabled className={cls}>
+                  {icon}{t[labelKey]}
+                  <span className="ml-auto text-[10px] text-[#333] font-mono">soon</span>
+                </button>
+              );
+            }
+            return (
+              <Link key={key} to={path} className={cls} onClick={() => setMobileOpen(false)}>
+                {icon}{t[labelKey]}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Lang switcher */}
