@@ -11,7 +11,7 @@ export default function ListingsPage({
   filtered, paginated, page, totalPages,
   search, sourceFilter, sortBy, priceMin, priceMax,
   priceBounds, sources, activeCount,
-  set, resetFilters,
+  set, resetFilters, expandedId, onExpand,
 }) {
   const { t } = useT();
   const [modalOpen, setModalOpen] = useState(false);
@@ -82,7 +82,7 @@ export default function ListingsPage({
             </div>
           ) : (
             <>
-              <ListingsTable listings={paginated} />
+              <ListingsTable listings={paginated} expandedId={expandedId} onExpand={onExpand} />
               <Pagination page={page} totalPages={totalPages} onChange={(p) => set({ page: p })} />
             </>
           )}

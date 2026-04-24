@@ -9,6 +9,7 @@ function getParams() {
     page:         Math.max(1, parseInt(p.get("page") ?? "1", 10)),
     priceMin:     p.get("pmin")   ?? "",
     priceMax:     p.get("pmax")   ?? "",
+    listing:      p.get("listing") ? Number(p.get("listing")) : null,
   };
 }
 
@@ -25,8 +26,9 @@ export function useUrlState() {
     if (state.sourceFilter !== "all") p.set("source", state.sourceFilter);
     if (state.sortBy !== "date")      p.set("sort",   state.sortBy);
     if (state.page > 1)               p.set("page",   state.page);
-    if (state.priceMin)               p.set("pmin",   state.priceMin);
-    if (state.priceMax)               p.set("pmax",   state.priceMax);
+    if (state.priceMin)               p.set("pmin",    state.priceMin);
+    if (state.priceMax)               p.set("pmax",    state.priceMax);
+    if (state.listing)                p.set("listing", state.listing);
     const qs = p.toString();
     window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
   }, [state]);

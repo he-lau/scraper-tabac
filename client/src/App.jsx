@@ -11,7 +11,7 @@ const PAGE_SIZE = 20;
 
 export default function App() {
   const { listings, loading, error, refetch } = useListings();
-  const [{ search, sourceFilter, sortBy, page, priceMin, priceMax }, set] = useUrlState();
+  const [{ search, sourceFilter, sortBy, page, priceMin, priceMax, listing }, set] = useUrlState();
   const { t } = useT();
   const { pathname } = useLocation();
 
@@ -89,6 +89,7 @@ export default function App() {
         priceMin={priceMin} priceMax={priceMax}
         priceBounds={priceBounds} sources={sources}
         activeCount={activeCount} set={set} resetFilters={resetFilters}
+        expandedId={listing} onExpand={(id) => set({ listing: id })}
       />
     </DashboardLayout>
   );

@@ -228,11 +228,11 @@ function DesktopTable({ listings, expanded, toggle }) {
 
 // ─── Export principal ──────────────────────────────────────────────────────
 
-export default function ListingsTable({ listings }) {
-  const [expanded, setExpanded] = useState(null);
+export default function ListingsTable({ listings, expandedId, onExpand }) {
   const { t } = useT();
   const isMobile = useIsMobile();
-  const toggle = (id) => setExpanded((prev) => (prev === id ? null : id));
+  const expanded = expandedId ?? null;
+  const toggle = (id) => onExpand(expanded === id ? null : id);
 
   if (isMobile) {
     return (
