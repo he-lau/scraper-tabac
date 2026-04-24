@@ -87,6 +87,7 @@ function MobileCard({ listing, expanded, onToggle }) {
   const loc = [listing.city, listing.department, listing.region].filter(Boolean)[0];
   return (
     <div
+      id={`listing-${listing.id}`}
       className="bg-white border border-[#E8E8E3] rounded-[10px] p-3.5 mb-2.5 cursor-pointer overflow-hidden"
       onClick={onToggle}
     >
@@ -181,6 +182,7 @@ function DesktopTable({ listings, expanded, toggle }) {
           {listings.map((l, idx) => (
             <React.Fragment key={l.id}>
               <tr
+                id={`listing-${l.id}`}
                 onClick={() => toggle(l.id)}
                 className={`border-b cursor-pointer transition-colors ${
                   expanded === l.id
@@ -233,6 +235,12 @@ export default function ListingsTable({ listings, expandedId, onExpand }) {
   const isMobile = useIsMobile();
   const expanded = expandedId ?? null;
   const toggle = (id) => onExpand(expanded === id ? null : id);
+
+  useEffect(() => {
+    if (!expandedId) return;
+    const el = document.getElementById(`listing-${expandedId}`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [expandedId]);
 
   if (isMobile) {
     return (
