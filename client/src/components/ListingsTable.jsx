@@ -239,7 +239,10 @@ export default function ListingsTable({ listings, expandedId, onExpand }) {
   useEffect(() => {
     if (!expandedId) return;
     const el = document.getElementById(`listing-${expandedId}`);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - 72;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
   }, [expandedId]);
 
   if (isMobile) {

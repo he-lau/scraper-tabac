@@ -1,4 +1,4 @@
-# 🚬 scraper-tabac
+# 🏬 scraper-tabac
 
 Scraper automatisé de cessions de fonds de commerce tabac/bar/brasserie, avec stockage en base de données PostgreSQL et déduplication des annonces.
 
@@ -29,9 +29,25 @@ scraper-tabac/
 │   ├── models.py            # Modèle Listing
 │   ├── session.py           # SessionLocal
 │   └── init_db.py           # Création des tables
+├── api/                     # API REST Express
+│   ├── server.js
+│   ├── routes/
+│   │   └── listingRoutes.js
+│   ├── controllers/
+│   │   └── listingController.js
+│   ├── models/
+│   │   └── listingModel.js
+│   └── middlewares/
+│       └── rateLimiter.js
+├── client/                  # Frontend React
+│   └── src/
+│       ├── pages/           # ListingsPage, StatsPage
+│       ├── routes/          # Définition des routes React Router
+│       ├── components/      # Composants UI réutilisables
+│       ├── hooks/           # useListings, useUrlState
+│       ├── lang/            # Traductions FR / ZH
+│       └── utils/           # format, exportCSV
 ├── logs/
-│   ├── scraper.log
-│   └── cron.log
 ├── Dockerfile
 ├── docker-compose.yml
 └── crontab                  # Exécution toutes les heures
@@ -86,17 +102,25 @@ PGADMIN_PASSWORD=your_pgadmin_password
 docker compose up -d --build
 ```
 
-Trois services sont lancés :
+Cinq services sont lancés :
 
 | Service | Description | Port |
 |---|---|---|
 | `db` | PostgreSQL 15 | `5432` |
 | `scraper` | Scraper Python + cron | — |
+| `api` | API REST Express | `8001` |
+| `frontend` | Interface React | `3000` |
 | `pgadmin` | Interface admin BDD | `5050` |
 
-### Accéder à pgAdmin
+### Accéder aux interfaces
 
-Ouvrir [http://localhost:5050](http://localhost:5050) et se connecter avec les credentials `PGADMIN_EMAIL` / `PGADMIN_PASSWORD` définis dans `.env`.
+| Interface | URL |
+|---|---|
+| Frontend | [http://localhost:3000](http://localhost:3000) |
+| API | [http://localhost:8001/api/listings](http://localhost:8001/api/listings) |
+| pgAdmin | [http://localhost:5050](http://localhost:5050) |
+
+Se connecter à pgAdmin avec les credentials `PGADMIN_EMAIL` / `PGADMIN_PASSWORD` définis dans `.env`.
 
 ### Lancer le scraper manuellement
 
@@ -124,14 +148,27 @@ Le scraper s'exécute automatiquement **toutes les heures** via une tâche cron 
 
 ## 🛠️ Stack technique
 
+**Scraper**
 - **Python 3.12**
 - **Playwright** — navigation headless (anti-bot)
 - **BeautifulSoup4 / lxml** — parsing HTML
 - **SQLAlchemy** — ORM
-- **PostgreSQL 15** — base de données
 - **Loguru** — logs structurés
-- **Docker Compose** — orchestration
-- **Cron** — planification des tâches
+- **Cron** — planification toutes les heures
+
+**API**
+- **Node.js / Express** — API REST
+- **express-rate-limit** — protection contre les abus
+
+**Frontend**
+- **React 18** — interface utilisateur
+- **React Router v6** — routing SPA (`/`, `/stats`)
+- **Tailwind CSS** — styles utilitaires
+- **Recharts** — graphiques statistiques
+
+**Infrastructure**
+- **PostgreSQL 15** — base de données
+- **Docker Compose** — orchestration de tous les services
 
 ## 📦 Installation locale (sans Docker)
 
