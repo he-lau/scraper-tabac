@@ -98,8 +98,14 @@ PGADMIN_PASSWORD=your_pgadmin_password
 
 ### Démarrer les services
 
+**Production** (nginx + build React statique) :
 ```bash
 docker compose up -d --build
+```
+
+**Développement** (hot reload + nodemon) :
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 ```
 
 Cinq services sont lancés :
