@@ -44,7 +44,7 @@ function Field({ label, value, mono }) {
   return (
     <div>
       <span className="text-[11px] text-[#888] block mb-0.5">{label}</span>
-      <span className={`text-[13px] font-medium text-[#1a1a1a] ${mono ? "font-mono text-[#666]" : ""}`}>
+      <span className={`text-[13px] font-medium text-[#1a1a1a] break-words ${mono ? "font-mono text-[#666]" : ""}`}>
         {value}
       </span>
     </div>
@@ -57,7 +57,7 @@ function ExpandedDetail({ listing }) {
     <div className="bg-[#F2F2EE] rounded-lg p-4 mt-2.5 flex flex-col gap-2.5">
       <div>
         <p className="text-[11px] text-[#888] uppercase tracking-[0.08em] font-semibold mb-1.5 mt-0">{t.description}</p>
-        <p className="text-[12.5px] text-[#444] leading-[1.65] m-0">{truncate(listing.description)}</p>
+        <p className="text-[12.5px] text-[#444] leading-[1.65] m-0 break-all">{truncate(listing.description)}</p>
       </div>
       <div className="flex flex-col gap-2">
         {listing.region     && <Field label={t.region}     value={listing.region} />}
@@ -87,7 +87,7 @@ function MobileCard({ listing, expanded, onToggle }) {
   const loc = [listing.city, listing.department, listing.region].filter(Boolean)[0];
   return (
     <div
-      className="bg-white border border-[#E8E8E3] rounded-[10px] p-3.5 mb-2.5 cursor-pointer"
+      className="bg-white border border-[#E8E8E3] rounded-[10px] p-3.5 mb-2.5 cursor-pointer overflow-hidden"
       onClick={onToggle}
     >
       <div className="flex justify-between items-start gap-2.5">
@@ -128,7 +128,7 @@ function ExpandedRow({ listing }) {
         <div className="bg-[#F2F2EE] rounded-lg p-4 grid grid-cols-2 gap-x-6 gap-y-2.5">
           <div>
             <p className="text-[11px] text-[#888] uppercase tracking-[0.08em] font-semibold mb-1.5 mt-0">{t.description}</p>
-            <p className="text-[12.5px] text-[#444] leading-[1.65] m-0">{truncate(listing.description)}</p>
+            <p className="text-[12.5px] text-[#444] leading-[1.65] m-0 break-all">{truncate(listing.description)}</p>
           </div>
           <div className="flex flex-col gap-2.5">
             {listing.region     && <Field label={t.region}     value={listing.region} />}
