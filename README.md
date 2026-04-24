@@ -100,13 +100,15 @@ PGADMIN_PASSWORD=your_pgadmin_password
 
 **Production** (nginx + build React statique) :
 ```bash
-docker compose up -d --build
+docker compose -f docker-compose.yml up -d --build
 ```
 
 **Développement** (hot reload + nodemon) :
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+docker compose up -d --build
 ```
+
+> `docker-compose.override.yml` est chargé automatiquement par Docker en dev.
 
 Cinq services sont lancés :
 
