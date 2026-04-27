@@ -45,6 +45,7 @@ export default {
 
   navListings:    "Annonces",
   navStats:       "Statistiques",
+  navFavorites:   "Mes favoris",
   navSettings:    "Paramètres",
 
   emptyTitle:     "Aucun résultat",
@@ -75,4 +76,7 @@ export default {
   authError:        "Une erreur est survenue",
   authLogout:           "Déconnexion",
   authContinueWithout:  "Continuer sans compte →",
+
+  favEmptyTitle:    "Aucun favori",
+  favEmptySubtitle: "Ajoutez des annonces en cliquant sur le ♡",
 };

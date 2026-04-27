@@ -45,6 +45,7 @@ export default {
 
   navListings:    "公告列表",
   navStats:       "统计",
+  navFavorites:   "我的收藏",
   navSettings:    "设置",
 
   emptyTitle:     "无结果",
@@ -75,4 +76,7 @@ export default {
   authError:        "发生错误",
   authLogout:           "退出登录",
   authContinueWithout:  "不登录继续浏览 →",
+
+  favEmptyTitle:    "暂无收藏",
+  favEmptySubtitle: "点击 ♡ 收藏感兴趣的公告",
 };

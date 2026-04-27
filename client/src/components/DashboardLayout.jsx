@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LayoutGrid, BarChart2, Settings, Menu, LogOut, LogIn } from "lucide-react";
+import { LayoutGrid, BarChart2, Menu, LogOut, LogIn, Heart } from "lucide-react";
 import { useT } from "../lang/LanguageContext";
 
 const NAV = [
-  { key: "listings", path: "/",      labelKey: "navListings", icon: <LayoutGrid size={16} /> },
-  { key: "stats",    path: "/stats", labelKey: "navStats",    icon: <BarChart2 size={16} /> },
-  { key: "settings", path: null,     labelKey: "navSettings", icon: <Settings size={16} />, disabled: true },
+  { key: "listings",   path: "/",          labelKey: "navListings",   icon: <LayoutGrid size={16} /> },
+  { key: "stats",      path: "/stats",     labelKey: "navStats",      icon: <BarChart2 size={16} /> },
+  { key: "favorites",  path: "/favorites", labelKey: "navFavorites",  icon: <Heart size={16} />, authOnly: true },
 ];
 
 
@@ -34,7 +34,7 @@ export default function DashboardLayout({ children, title, actions, user, onLogo
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 flex flex-col gap-1">
-          {NAV.map(({ key, path, labelKey, icon, disabled }) => {
+          {NAV.filter(({ authOnly }) => !authOnly || user).map(({ key, path, labelKey, icon, disabled }) => {
             const isActive = path === "/" ? pathname === "/" : pathname.startsWith(path);
             const cls = `w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium text-left transition-colors ${
               disabled ? "text-[#444] cursor-not-allowed" :

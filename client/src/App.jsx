@@ -79,6 +79,7 @@ export default function App() {
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const isStats = pathname === "/stats";
+  const isFavorites = pathname === "/favorites";
 
   const routeProps = {
     listings, loading, error,
@@ -99,7 +100,7 @@ export default function App() {
   }
 
   // actions : actualiser + export csv
-  const headerActions = !isStats ? (
+  const headerActions = !isStats && !isFavorites ? (
     <>
       <button className="btn-secondary" onClick={refetch}>
         <RefreshCw size={12} />
@@ -113,7 +114,7 @@ export default function App() {
   ) : null;
 
   return (
-    <DashboardLayout title={isStats ? t.navStats : t.navListings} actions={headerActions} user={user} onLogout={logout}>
+    <DashboardLayout title={isStats ? t.navStats : isFavorites ? t.navFavorites : t.navListings} actions={headerActions} user={user} onLogout={logout}>
       <AppRoutes {...routeProps} />
     </DashboardLayout>
   );
