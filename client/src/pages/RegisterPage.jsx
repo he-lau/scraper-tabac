@@ -97,6 +97,11 @@ export default function RegisterPage({ onLogin }) {
             {t.authLogin}
           </Link>
         </p>
+        <p className="text-center mt-2">
+          <Link to="/" className="text-[11px] text-[#aaa] hover:text-[#555] transition-colors">
+            {t.authContinueWithout}
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -73,5 +73,6 @@ export default {
   authHasAccount:   "Déjà un compte ?",
   authLoading:      "Chargement…",
   authError:        "Une erreur est survenue",
-  authLogout:       "Déconnexion",
+  authLogout:           "Déconnexion",
+  authContinueWithout:  "Continuer sans compte →",
 };

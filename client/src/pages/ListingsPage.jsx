@@ -13,6 +13,7 @@ export default function ListingsPage({
   search, sourceFilter, sortBy, priceMin, priceMax,
   priceBounds, sources, activeCount,
   setUrlState, resetFilters, expandedId, onExpand,
+  favoriteIds, onToggleFavorite, isAuthenticated,
 }) {
   const { t } = useT();
   // etat du modal de filtre
@@ -81,7 +82,10 @@ export default function ListingsPage({
             </div>
           ) : (
             <>
-              <ListingsTable listings={paginated} expandedId={expandedId} onExpand={onExpand} />
+              <ListingsTable
+                listings={paginated} expandedId={expandedId} onExpand={onExpand}
+                favoriteIds={favoriteIds} onToggleFavorite={onToggleFavorite} isAuthenticated={isAuthenticated}
+              />
               <Pagination page={page} totalPages={totalPages} onChange={(p) => setUrlState({ page: p })} />
             </>
           )}

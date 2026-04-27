@@ -73,5 +73,6 @@ export default {
   authHasAccount:   "已有账户？",
   authLoading:      "加载中…",
   authError:        "发生错误",
-  authLogout:       "退出登录",
+  authLogout:           "退出登录",
+  authContinueWithout:  "不登录继续浏览 →",
 };

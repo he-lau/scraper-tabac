@@ -4,6 +4,7 @@ import { RefreshCw, Download } from "lucide-react";
 import { useListings } from "./hooks/useListings";
 import { useUrlState } from "./hooks/useUrlState";
 import { useAuth } from "./hooks/useAuth";
+import { useFavorites } from "./hooks/useFavorites";
 import { useT } from "./lang/LanguageContext";
 import DashboardLayout from "./components/DashboardLayout";
 import AppRoutes from "./routes";
@@ -18,6 +19,7 @@ export default function App() {
   const { t } = useT();
   const { pathname } = useLocation();
   const { token, user, login, logout, isAuthenticated } = useAuth();
+  const { favoriteIds, toggle: toggleFavorite } = useFavorites(token);
 
   const isAuthPage = pathname === "/login" || pathname === "/register";
   // filtre par défaut
@@ -88,6 +90,7 @@ export default function App() {
     activeCount, setUrlState, resetFilters,
     expandedId: listing, onExpand: (id) => setUrlState({ listing: id }),
     onLogin: login, onLogout: logout, user, isAuthenticated,
+    favoriteIds, onToggleFavorite: toggleFavorite,
   };
 
   // Pages login/register sans DashboardLayout
