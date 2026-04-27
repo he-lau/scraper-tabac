@@ -3,6 +3,7 @@ const cors = require("cors");
 const limiter = require("./middlewares/rateLimiter");
 const listingRoutes = require("./routes/listingRoutes");
 const authRoutes = require("./routes/authRoutes");
+const favoriteRoutes = require("./routes/favoriteRoutes");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 
 app.use("/api", listingRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/favorites", favoriteRoutes);
 
 app.use((req, res) => {
   res.status(404).send("Page not found");
