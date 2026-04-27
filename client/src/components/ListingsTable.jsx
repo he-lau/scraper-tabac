@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, ExternalLink } from "lucide-react";
+import { ChevronDown, ExternalLink, Heart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { fmtPrice, fmtDate, truncate, getFreshness } from "../utils/format";
 import { useT } from "../lang/LanguageContext";
 
@@ -81,7 +82,7 @@ function ExpandedDetail({ listing }) {
 
 // ─── Vue mobile : cards ────────────────────────────────────────────────────
 
-function MobileCard({ listing, expanded, onToggle }) {
+function MobileCard({ listing, expanded, onToggle, isFav, onToggleFav }) {
   const loc = [listing.city, listing.department, listing.region].filter(Boolean)[0];
   return (
     <div
@@ -94,10 +95,18 @@ function MobileCard({ listing, expanded, onToggle }) {
           <p className="font-medium text-[13px] leading-[1.45] m-0">{listing.title}</p>
           <FreshBadge date={listing.created_at} />
         </div>
-        <ChevronDown
-          size={14}
-          className={`flex-shrink-0 text-[#aaa] transition-transform mt-0.5 ${expanded ? "rotate-180" : ""}`}
-        />
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <button
+            onClick={(e) => { e.stopPropagation(); onToggleFav(listing.id); }}
+            className="text-[#ccc] hover:text-rose-400 cursor-pointer transition-colors"
+          >
+            <Heart size={14} fill={isFav ? "#fb7185" : "none"} stroke={isFav ? "#fb7185" : "currentColor"} />
+          </button>
+          <ChevronDown
+            size={14}
+            className={`text-[#aaa] transition-transform mt-0.5 ${expanded ? "rotate-180" : ""}`}
+          />
+        </div>
       </div>
 
       <div className="flex items-center gap-2 mt-2.5 flex-wrap">
@@ -154,7 +163,7 @@ const TH = ({ children }) => (
   </th>
 );
 
-function DesktopTable({ listings, expanded, toggle }) {
+function DesktopTable({ listings, expanded, toggle, favoriteIds, onToggleFavorite }) {
   const { t } = useT();
   return (
     <div className="border border-[#E8E8E3] rounded-xl overflow-hidden">
@@ -204,10 +213,18 @@ function DesktopTable({ listings, expanded, toggle }) {
                   {fmtDate(l.created_at)}
                 </td>
                 <td className="px-3.5 py-3">
-                  <ChevronDown
-                    size={14}
-                    className={`text-[#aaa] transition-transform ${expanded === l.id ? "rotate-180" : ""}`}
-                  />
+                  <div className="flex items-center gap-3 justify-end">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onToggleFavorite(l.id); }}
+                      className="text-[#ccc] hover:text-rose-400 cursor-pointer transition-colors"
+                    >
+                      <Heart size={13} fill={favoriteIds.has(l.id) ? "#fb7185" : "none"} stroke={favoriteIds.has(l.id) ? "#fb7185" : "currentColor"} />
+                    </button>
+                    <ChevronDown
+                      size={14}
+                      className={`text-[#aaa] transition-transform ${expanded === l.id ? "rotate-180" : ""}`}
+                    />
+                  </div>
                 </td>
               </tr>
               {expanded === l.id && <ExpandedRow key={`${l.id}-exp`} listing={l} />}
@@ -221,9 +238,14 @@ function DesktopTable({ listings, expanded, toggle }) {
 
 // ─── Export principal ──────────────────────────────────────────────────────
 
-export default function ListingsTable({ listings, expandedId, onExpand }) {
+export default function ListingsTable({ listings, expandedId, onExpand, favoriteIds = new Set(), onToggleFavorite, isAuthenticated }) {
   const { t } = useT();
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
+  const handleFav = (listingId) => {
+    if (!isAuthenticated) { navigate("/login"); return; }
+    onToggleFavorite(listingId);
+  };
   const expanded = expandedId ?? null;
   const toggle = (id) => onExpand(expanded === id ? null : id);
 
@@ -243,11 +265,14 @@ export default function ListingsTable({ listings, expandedId, onExpand }) {
           <p className="text-center py-10 text-[#aaa] text-[13px]">{t.noListings}</p>
         )}
         {listings.map((l) => (
-          <MobileCard key={l.id} listing={l} expanded={expanded === l.id} onToggle={() => toggle(l.id)} />
+          <MobileCard
+            key={l.id} listing={l} expanded={expanded === l.id} onToggle={() => toggle(l.id)}
+            isFav={favoriteIds.has(l.id)} onToggleFav={handleFav}
+          />
         ))}
       </div>
     );
   }
 
-  return <DesktopTable listings={listings} expanded={expanded} toggle={toggle} />;
+  return <DesktopTable listings={listings} expanded={expanded} toggle={toggle} favoriteIds={favoriteIds} onToggleFavorite={handleFav} />;
 }

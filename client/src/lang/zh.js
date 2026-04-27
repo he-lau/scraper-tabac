@@ -45,6 +45,7 @@ export default {
 
   navListings:    "公告列表",
   navStats:       "统计",
+  navFavorites:   "我的收藏",
   navSettings:    "设置",
 
   emptyTitle:     "无结果",
@@ -61,4 +62,21 @@ export default {
   statByRegion:   "热门大区",
   statByDep:      "热门省份",
   statTimeline:   "近30天抓取数量",
+
+  authLoginTitle:   "登录",
+  authRegisterTitle:"创建账户",
+  authEmail:        "邮箱",
+  authPassword:     "密码",
+  authLogin:        "登录",
+  authCreateAccount:"创建账户",
+  authRegister:     "注册",
+  authNoAccount:    "还没有账户？",
+  authHasAccount:   "已有账户？",
+  authLoading:      "加载中…",
+  authError:        "发生错误",
+  authLogout:           "退出登录",
+  authContinueWithout:  "不登录继续浏览 →",
+
+  favEmptyTitle:    "暂无收藏",
+  favEmptySubtitle: "点击 ♡ 收藏感兴趣的公告",
 };
