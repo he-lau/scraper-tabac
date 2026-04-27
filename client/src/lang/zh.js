@@ -61,4 +61,17 @@ export default {
   statByRegion:   "热门大区",
   statByDep:      "热门省份",
   statTimeline:   "近30天抓取数量",
+
+  authLoginTitle:   "登录",
+  authRegisterTitle:"创建账户",
+  authEmail:        "邮箱",
+  authPassword:     "密码",
+  authLogin:        "登录",
+  authCreateAccount:"创建账户",
+  authRegister:     "注册",
+  authNoAccount:    "还没有账户？",
+  authHasAccount:   "已有账户？",
+  authLoading:      "加载中…",
+  authError:        "发生错误",
+  authLogout:       "退出登录",
 };

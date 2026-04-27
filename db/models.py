@@ -1,6 +1,6 @@
 # db/models.py
 
-from sqlalchemy import Column, Integer, String, Float, JSON, Boolean, DateTime, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Float, JSON, Boolean, DateTime, ForeignKey, UniqueConstraint, text
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from db.base import Base
@@ -32,7 +32,7 @@ class Listing(Base):
     url = Column(String)
     fingerprint = Column(String, unique=True, index=True)
     is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, server_default=text("NOW()"))
     extras = Column(JSON)
 
 
@@ -42,7 +42,7 @@ class User(Base):
     id         = Column(Integer, primary_key=True)
     email      = Column(String, unique=True, nullable=False, index=True)
     password   = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, server_default=text("NOW()"))
 
     favorites  = relationship("Favorite", back_populates="user", cascade="all, delete-orphan")
 
@@ -53,7 +53,7 @@ class Favorite(Base):
     id         = Column(Integer, primary_key=True)
     user_id    = Column(Integer, ForeignKey("users.id"), nullable=False)
     listing_id = Column(Integer, ForeignKey("listings.id"), nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, server_default=text("NOW()"))
 
     user    = relationship("User", back_populates="favorites")
     listing = relationship("Listing")

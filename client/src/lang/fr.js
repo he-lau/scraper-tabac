@@ -61,4 +61,17 @@ export default {
   statByRegion:   "Top régions",
   statByDep:      "Top départements",
   statTimeline:   "Annonces scrappées (30 derniers jours)",
+
+  authLoginTitle:   "Connexion",
+  authRegisterTitle:"Créer un compte",
+  authEmail:        "Email",
+  authPassword:     "Mot de passe",
+  authLogin:        "Se connecter",
+  authCreateAccount:"Créer un compte",
+  authRegister:     "S'inscrire",
+  authNoAccount:    "Pas encore de compte ?",
+  authHasAccount:   "Déjà un compte ?",
+  authLoading:      "Chargement…",
+  authError:        "Une erreur est survenue",
+  authLogout:       "Déconnexion",
 };

@@ -1,8 +1,9 @@
 import { useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 import { RefreshCw, Download } from "lucide-react";
 import { useListings } from "./hooks/useListings";
 import { useUrlState } from "./hooks/useUrlState";
+import { useAuth } from "./hooks/useAuth";
 import { useT } from "./lang/LanguageContext";
 import DashboardLayout from "./components/DashboardLayout";
 import AppRoutes from "./routes";
@@ -16,6 +17,9 @@ export default function App() {
   const [{ search, sourceFilter, sortBy, page, priceMin, priceMax, listing }, setUrlState] = useUrlState();
   const { t } = useT();
   const { pathname } = useLocation();
+  const { token, user, login, logout, isAuthenticated } = useAuth();
+
+  const isAuthPage = pathname === "/login" || pathname === "/register";
   // filtre par défaut
   const resetFilters = () => setUrlState({ search: "", sourceFilter: "all", sortBy: "date", priceMin: "", priceMax: "", page: 1 });
 
@@ -74,6 +78,23 @@ export default function App() {
 
   const isStats = pathname === "/stats";
 
+  const routeProps = {
+    listings, loading, error,
+    filtered, paginated,
+    page, totalPages,
+    search, sourceFilter, sortBy,
+    priceMin, priceMax,
+    priceBounds, sources,
+    activeCount, setUrlState, resetFilters,
+    expandedId: listing, onExpand: (id) => setUrlState({ listing: id }),
+    onLogin: login, onLogout: logout, user, isAuthenticated,
+  };
+
+  // Pages login/register sans DashboardLayout
+  if (isAuthPage) {
+    return <AppRoutes {...routeProps} />;
+  }
+
   // actions : actualiser + export csv
   const headerActions = !isStats ? (
     <>
@@ -89,17 +110,8 @@ export default function App() {
   ) : null;
 
   return (
-    <DashboardLayout title={isStats ? t.navStats : t.navListings} actions={headerActions}>
-      <AppRoutes
-        listings={listings} loading={loading} error={error}
-        filtered={filtered} paginated={paginated}
-        page={page} totalPages={totalPages}
-        search={search} sourceFilter={sourceFilter} sortBy={sortBy}
-        priceMin={priceMin} priceMax={priceMax}
-        priceBounds={priceBounds} sources={sources}
-        activeCount={activeCount} setUrlState={setUrlState} resetFilters={resetFilters}
-        expandedId={listing} onExpand={(id) => setUrlState({ listing: id })}
-      />
+    <DashboardLayout title={isStats ? t.navStats : t.navListings} actions={headerActions} user={user} onLogout={logout}>
+      <AppRoutes {...routeProps} />
     </DashboardLayout>
   );
 }

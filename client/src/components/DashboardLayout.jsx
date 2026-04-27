@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { LayoutGrid, BarChart2, Settings, Menu } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { LayoutGrid, BarChart2, Settings, Menu, LogOut, LogIn } from "lucide-react";
 import { useT } from "../lang/LanguageContext";
 
 const NAV = [
@@ -10,10 +10,13 @@ const NAV = [
 ];
 
 
-export default function DashboardLayout({ children, title, actions }) {
+export default function DashboardLayout({ children, title, actions, user, onLogout }) {
   const { t, lang, toggle } = useT();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleLogout = () => { onLogout(); navigate("/login"); };
 
   return (
     <div className="min-h-screen bg-[#F4F4F2] flex">
@@ -52,6 +55,28 @@ export default function DashboardLayout({ children, title, actions }) {
             );
           })}
         </nav>
+
+        {/* Auth */}
+        <div className="px-3 pb-2">
+          {user ? (
+            <div className="flex flex-col gap-1">
+              <p className="text-[11px] text-[#555] font-mono px-3 truncate">{user.email}</p>
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium text-[#999] hover:text-white hover:bg-[#1a1a1a] cursor-pointer transition-colors"
+              >
+                <LogOut size={16} />{t.authLogout}
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium text-[#999] hover:text-white hover:bg-[#1a1a1a] cursor-pointer transition-colors"
+            >
+              <LogIn size={16} />{t.authLogin}
+            </Link>
+          )}
+        </div>
 
         {/* Lang switcher */}
         <div className="px-4 py-4 border-t border-[#222]">
