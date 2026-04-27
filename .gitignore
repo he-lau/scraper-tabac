@@ -17,3 +17,6 @@ __pycache__/
 
 # VS Code
 .vscode/
+
+docker_command.md
+test_db.py

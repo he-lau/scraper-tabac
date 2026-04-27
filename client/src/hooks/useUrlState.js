@@ -16,7 +16,8 @@ function getParams() {
 export function useUrlState() {
   const [state, setState] = useState(getParams);
 
-  const set = useCallback((updates) => {
+  // MAJ de l'attribut sans écraser le reste
+  const setUrlState = useCallback((updates) => {
     setState((prev) => ({ ...prev, ...updates }));
   }, []);
 
@@ -33,5 +34,5 @@ export function useUrlState() {
     window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
   }, [state]);
 
-  return [state, set];
+  return [state, setUrlState];
 }
