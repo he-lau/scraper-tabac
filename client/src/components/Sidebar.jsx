@@ -1,3 +1,4 @@
+import { ListFilter } from "lucide-react";
 import { fmtPrice } from "../utils/format";
 import { useT } from "../lang/LanguageContext";
 
@@ -36,9 +37,7 @@ export default function Sidebar({ listings, activeCount, onOpenFilters }) {
         className={`relative btn w-full justify-center ${activeCount > 0 ? "btn-primary" : "btn-secondary"}`}
         onClick={onOpenFilters}
       >
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-          <line x1="4" y1="6" x2="20" y2="6" /><line x1="8" y1="12" x2="16" y2="12" /><line x1="11" y1="18" x2="13" y2="18" />
-        </svg>
+        <ListFilter size={13} />
         {t.filters}
         {activeCount > 0 && (
           <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-white text-[#1a1a1a] text-[10px] flex items-center justify-center font-semibold border border-[#1a1a1a]">

@@ -8,6 +8,7 @@ export function useListings() {
   const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8001";
   
 
+  // useCallback pour mettre en cache la fonction pour éviter le re-render infini
   const fetchListings = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -15,14 +16,17 @@ export function useListings() {
       const res = await fetch(`${apiUrl}/api/listings?all=1`);
       if (!res.ok) throw new Error(`Erreur ${res.status}`);
       const data = await res.json();
+      // MAJ datas
       setListings(data);
     } catch (err) {
       setError(err.message);
     } finally {
+      // fin de la requête, maj l'UI
       setLoading(false);
     }
   }, []);
 
+  // requête à l'api après render
   useEffect(() => {
     fetchListings();
   }, [fetchListings]);

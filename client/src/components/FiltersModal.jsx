@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { X, Search } from "lucide-react";
 import PriceRangeSlider from "./PriceRangeSlider";
 import { useT } from "../lang/LanguageContext";
 
@@ -22,8 +23,10 @@ export default function FiltersModal({
     return () => window.removeEventListener("keydown", handler);
   }, [open, onClose]);
 
+  // si fermé on retourne pas de jsx
   if (!open) return null;
 
+  // sinon la modal
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center" onClick={onClose}>
       <div className="absolute inset-0 bg-black/30" />
@@ -43,9 +46,7 @@ export default function FiltersModal({
               </button>
             )}
             <button onClick={onClose} className="text-[#aaa] hover:text-[#1a1a1a] cursor-pointer">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
+              <X size={16} />
             </button>
           </div>
         </div>
@@ -53,9 +54,7 @@ export default function FiltersModal({
         <div className="flex flex-col gap-1.5">
           <label className="text-[11px] text-[#888] uppercase tracking-[0.08em] font-semibold">{t.search}</label>
           <div className="relative">
-            <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#aaa] pointer-events-none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
+            <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#aaa] pointer-events-none" />
             <input
               value={search}
               onChange={(e) => onSearch(e.target.value)}

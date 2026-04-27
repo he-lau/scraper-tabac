@@ -14,6 +14,11 @@ export function LanguageProvider({ children }) {
     setLang(next);
   };
 
+  /**
+   * lang : langue courante
+   * toggle : l'autre langue
+   * t : traduction
+   */
   return (
     <LanguageContext.Provider value={{ lang, toggle, t: translations[lang] }}>
       {children}

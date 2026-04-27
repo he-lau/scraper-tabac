@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ChevronDown, ExternalLink } from "lucide-react";
 import { fmtPrice, fmtDate, truncate, getFreshness } from "../utils/format";
 import { useT } from "../lang/LanguageContext";
 
@@ -71,10 +72,7 @@ function ExpandedDetail({ listing }) {
           className="btn-sm-primary no-underline"
         >
           {t.seeAd}
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-            <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
-          </svg>
+          <ExternalLink size={11} />
         </a>
       </div>
     </div>
@@ -96,12 +94,10 @@ function MobileCard({ listing, expanded, onToggle }) {
           <p className="font-medium text-[13px] leading-[1.45] m-0">{listing.title}</p>
           <FreshBadge date={listing.created_at} />
         </div>
-        <svg
+        <ChevronDown
+          size={14}
           className={`flex-shrink-0 text-[#aaa] transition-transform mt-0.5 ${expanded ? "rotate-180" : ""}`}
-          width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-        >
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
+        />
       </div>
 
       <div className="flex items-center gap-2 mt-2.5 flex-wrap">
@@ -143,10 +139,7 @@ function ExpandedRow({ listing }) {
               className="btn-sm-primary no-underline self-start mt-1"
             >
               {t.seeAd}
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
+              <ExternalLink size={11} />
             </a>
           </div>
         </div>
@@ -211,12 +204,10 @@ function DesktopTable({ listings, expanded, toggle }) {
                   {fmtDate(l.created_at)}
                 </td>
                 <td className="px-3.5 py-3">
-                  <svg
+                  <ChevronDown
+                    size={14}
                     className={`text-[#aaa] transition-transform ${expanded === l.id ? "rotate-180" : ""}`}
-                    width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                  >
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
+                  />
                 </td>
               </tr>
               {expanded === l.id && <ExpandedRow key={`${l.id}-exp`} listing={l} />}
