@@ -136,6 +136,16 @@ Se connecter à pgAdmin avec les credentials `PGADMIN_EMAIL` / `PGADMIN_PASSWORD
 docker compose exec scraper python main.py
 ```
 
+### Lancer les tests
+
+Les tests de l'API utilisent une base de données dédiée (`scraper-tabac-test`) créée automatiquement au lancement.
+
+```bash
+docker compose exec api npm test
+```
+
+27 tests couvrent les routes `listings`, `auth` et `favorites`.
+
 ### Voir les logs
 
 ```bash
