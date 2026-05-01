@@ -12,6 +12,7 @@ export default function RegisterPage({ onLogin }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [sent, setSent] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,22 +26,32 @@ export default function RegisterPage({ onLogin }) {
       });
       const data = await res.json();
       if (!res.ok) return setError(data.error);
-
-      // Auto-login après inscription
-      const loginRes = await fetch(`${apiUrl}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const loginData = await loginRes.json();
-      onLogin(loginData.token, loginData.user);
-      navigate("/");
+      setSent(true);
     } catch {
       setError(t.authError);
     } finally {
       setLoading(false);
     }
   };
+
+  if (sent) {
+    return (
+      <div className="min-h-screen bg-[#F4F4F2] flex items-center justify-center px-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#E8E8E3] w-full max-w-sm p-8 text-center">
+          <p className="text-[10px] font-mono text-[#888] tracking-[0.12em] uppercase mb-1">scraper</p>
+          <h1 className="text-[20px] font-semibold tracking-tight mb-6">Tabac · Bar · FDJ</h1>
+          <div className="text-4xl mb-4">✉️</div>
+          <p className="text-[15px] font-semibold mb-2">{t.authCheckEmail}</p>
+          <p className="text-[13px] text-[#888]">{t.authCheckEmailSub} <span className="text-[#111] font-medium">{email}</span></p>
+          <p className="text-center mt-6">
+            <Link to="/" className="text-[11px] text-[#aaa] hover:text-[#555] transition-colors">
+              {t.authContinueWithout}
+            </Link>
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F4F4F2] flex items-center justify-center px-4">

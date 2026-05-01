@@ -76,6 +76,11 @@ export default {
   authError:        "发生错误",
   authLogout:           "退出登录",
   authContinueWithout:  "不登录继续浏览 →",
+  authCheckEmail:       "请查收邮件",
+  authCheckEmailSub:    "确认链接已发送至",
+  authVerifying:        "验证中…",
+  authVerified:         "账户已激活！",
+  authVerifiedSub:      "即将自动跳转。",
 
   favEmptyTitle:    "暂无收藏",
   favEmptySubtitle: "点击 ♡ 收藏感兴趣的公告",

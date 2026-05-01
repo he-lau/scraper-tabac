@@ -76,6 +76,11 @@ export default {
   authError:        "Une erreur est survenue",
   authLogout:           "Déconnexion",
   authContinueWithout:  "Continuer sans compte →",
+  authCheckEmail:       "Vérifiez vos emails",
+  authCheckEmailSub:    "Un lien de confirmation a été envoyé à",
+  authVerifying:        "Vérification en cours…",
+  authVerified:         "Compte activé !",
+  authVerifiedSub:      "Vous allez être redirigé automatiquement.",
 
   favEmptyTitle:    "Aucun favori",
   favEmptySubtitle: "Ajoutez des annonces en cliquant sur le ♡",
