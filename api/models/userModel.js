@@ -3,12 +3,12 @@ const db = require("../db");
 const findByEmail = (email) =>
   db.query("SELECT * FROM users WHERE email = $1", [email]).then((r) => r.rows[0]);
 
-const create = (email, hashedPassword, verificationToken, verificationTokenExpires) =>
+const create = (email, hashedPassword, verificationToken, verificationTokenExpires, firstName, lastName, gender) =>
   db.query(
-    `INSERT INTO users (email, password, verified, verification_token, verification_token_expires)
-     VALUES ($1, $2, FALSE, $3, $4)
+    `INSERT INTO users (email, password, verified, verification_token, verification_token_expires, first_name, last_name, gender)
+     VALUES ($1, $2, FALSE, $3, $4, $5, $6, $7)
      RETURNING id, email, created_at`,
-    [email, hashedPassword, verificationToken, verificationTokenExpires]
+    [email, hashedPassword, verificationToken, verificationTokenExpires, firstName || null, lastName || null, gender || null]
   ).then((r) => r.rows[0]);
 
 const findByVerificationToken = (token) =>

@@ -5,7 +5,7 @@ import { useT } from "../lang/LanguageContext";
 import apiUrl from "../utils/api";
 
 export default function LoginPage({ onLogin }) {
-  const { t } = useT();
+  const { t, lang, toggle } = useT();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,6 +53,17 @@ export default function LoginPage({ onLogin }) {
 
   return (
     <div className="min-h-screen bg-[#F4F4F2] flex items-center justify-center px-4">
+      <div className="fixed top-4 right-4 flex items-center border border-[#D8D8D3] rounded-lg overflow-hidden text-[11px] font-medium">
+        {["fr", "zh"].map((l) => (
+          <button
+            key={l}
+            onClick={() => l !== lang && toggle()}
+            className={`px-2.5 py-1.5 cursor-pointer transition-colors ${lang === l ? "bg-[#111] text-white" : "bg-white text-[#888] hover:text-[#111]"}`}
+          >
+            {l === "fr" ? "FR" : "中文"}
+          </button>
+        ))}
+      </div>
       <div className="bg-white rounded-2xl shadow-sm border border-[#E8E8E3] w-full max-w-sm p-8">
         <p className="text-[10px] font-mono text-[#888] tracking-[0.12em] uppercase mb-1">scraper</p>
         <h1 className="text-[20px] font-semibold tracking-tight">Tabac · Bar · FDJ</h1>

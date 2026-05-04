@@ -15,6 +15,9 @@ module.exports = async function migrate() {
     ALTER TABLE users ADD COLUMN IF NOT EXISTS verified                   BOOLEAN DEFAULT FALSE;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token         VARCHAR;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token_expires TIMESTAMP;
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name                 VARCHAR;
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name                  VARCHAR;
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS gender                     VARCHAR(1);
 
     CREATE TABLE IF NOT EXISTS favorites (
       id         SERIAL PRIMARY KEY,

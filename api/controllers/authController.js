@@ -7,7 +7,7 @@ const { sendVerificationEmail } = require("../services/emailService");
 const SALT_ROUNDS = 10;
 
 const register = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, firstName, lastName, gender } = req.body;
   if (!email || !password) return res.status(400).json({ error: "Email et mot de passe requis" });
 
   const existing = await userModel.findByEmail(email);
@@ -20,7 +20,7 @@ const register = async (req, res) => {
   if (existing && !existing.verified) {
     await userModel.updateVerificationToken(email, verificationToken, verificationTokenExpires);
   } else {
-    await userModel.create(email, hashed, verificationToken, verificationTokenExpires);
+    await userModel.create(email, hashed, verificationToken, verificationTokenExpires, firstName, lastName, gender);
   }
   await sendVerificationEmail(email, verificationToken);
 
