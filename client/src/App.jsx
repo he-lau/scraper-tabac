@@ -21,7 +21,7 @@ export default function App() {
   const { token, user, login, logout, isAuthenticated } = useAuth();
   const { favoriteIds, toggle: toggleFavorite } = useFavorites(token);
 
-  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isAuthPage = pathname === "/login" || pathname === "/register" || pathname.startsWith("/verify/");
   // filtre par défaut
   const resetFilters = () => setUrlState({ search: "", sourceFilter: "all", sortBy: "date", priceMin: "", priceMax: "", page: 1 });
 
