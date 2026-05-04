@@ -23,6 +23,19 @@ module.exports = async function migrate() {
     ALTER TABLE favorites ADD CONSTRAINT favorites_user_id_fkey
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
+    CREATE TABLE IF NOT EXISTS alerts (
+      id         SERIAL PRIMARY KEY,
+      user_id    INTEGER REFERENCES users(id) ON DELETE CASCADE,
+      name       VARCHAR,
+      keywords   VARCHAR,
+      source     VARCHAR,
+      price_min  FLOAT,
+      price_max  FLOAT,
+      region     VARCHAR,
+      active     BOOLEAN DEFAULT TRUE,
+      created_at TIMESTAMP DEFAULT NOW()
+    );
+
     CREATE TABLE IF NOT EXISTS favorites (
       id         SERIAL PRIMARY KEY,
       user_id    INTEGER REFERENCES users(id) ON DELETE CASCADE,
