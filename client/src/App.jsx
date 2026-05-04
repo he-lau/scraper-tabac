@@ -18,10 +18,10 @@ export default function App() {
   const [{ search, sourceFilter, sortBy, page, priceMin, priceMax, listing }, setUrlState] = useUrlState();
   const { t } = useT();
   const { pathname } = useLocation();
-  const { token, user, login, logout, isAuthenticated } = useAuth();
+  const { token, user, login, logout, updateUser, isAuthenticated } = useAuth();
   const { favoriteIds, toggle: toggleFavorite } = useFavorites(token);
 
-  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isAuthPage = pathname === "/login" || pathname === "/register" || pathname.startsWith("/verify/");
   // filtre par défaut
   const resetFilters = () => setUrlState({ search: "", sourceFilter: "all", sortBy: "date", priceMin: "", priceMax: "", page: 1 });
 
@@ -80,6 +80,8 @@ export default function App() {
 
   const isStats = pathname === "/stats";
   const isFavorites = pathname === "/favorites";
+  const isProfile = pathname === "/profile";
+  const isAlerts = pathname === "/alerts";
 
   const routeProps = {
     listings, loading, error,
@@ -90,7 +92,7 @@ export default function App() {
     priceBounds, sources,
     activeCount, setUrlState, resetFilters,
     expandedId: listing, onExpand: (id) => setUrlState({ listing: id }),
-    onLogin: login, onLogout: logout, user, isAuthenticated,
+    onLogin: login, onLogout: logout, onUpdateUser: updateUser, token, user, isAuthenticated,
     favoriteIds, onToggleFavorite: toggleFavorite,
   };
 
@@ -100,7 +102,7 @@ export default function App() {
   }
 
   // actions : actualiser + export csv
-  const headerActions = !isStats && !isFavorites ? (
+  const headerActions = !isStats && !isFavorites && !isProfile && !isAlerts ? (
     <>
       <button className="btn-secondary" onClick={refetch}>
         <RefreshCw size={12} />
@@ -114,7 +116,7 @@ export default function App() {
   ) : null;
 
   return (
-    <DashboardLayout title={isStats ? t.navStats : isFavorites ? t.navFavorites : t.navListings} actions={headerActions} user={user} onLogout={logout}>
+    <DashboardLayout title={isStats ? t.navStats : isFavorites ? t.navFavorites : isProfile ? t.profileTitle : isAlerts ? t.alertsTitle : t.navListings} actions={headerActions} user={user} onLogout={logout}>
       <AppRoutes {...routeProps} />
     </DashboardLayout>
   );

@@ -45,6 +45,24 @@ class User(Base):
     created_at = Column(DateTime, server_default=text("NOW()"))
 
     favorites  = relationship("Favorite", back_populates="user", cascade="all, delete-orphan")
+    alerts     = relationship("Alert", back_populates="user", cascade="all, delete-orphan")
+
+
+class Alert(Base):
+    __tablename__ = "alerts"
+
+    id        = Column(Integer, primary_key=True)
+    user_id   = Column(Integer, ForeignKey("users.id"), nullable=False)
+    name      = Column(String)
+    keywords  = Column(String)
+    source    = Column(String)
+    price_min = Column(Float)
+    price_max = Column(Float)
+    region    = Column(String)
+    active    = Column(Boolean, default=True)
+    created_at = Column(DateTime, server_default=text("NOW()"))
+
+    user = relationship("User", back_populates="alerts")
 
 
 class Favorite(Base):

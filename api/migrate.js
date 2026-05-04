@@ -3,9 +3,36 @@ const db = require("./db");
 module.exports = async function migrate() {
   await db.query(`
     CREATE TABLE IF NOT EXISTS users (
+      id                          SERIAL PRIMARY KEY,
+      email                       VARCHAR UNIQUE NOT NULL,
+      password                    VARCHAR NOT NULL,
+      verified                    BOOLEAN DEFAULT FALSE,
+      verification_token          VARCHAR,
+      verification_token_expires  TIMESTAMP,
+      created_at                  TIMESTAMP DEFAULT NOW()
+    );
+
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS verified                   BOOLEAN DEFAULT FALSE;
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token         VARCHAR;
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token_expires TIMESTAMP;
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name                 VARCHAR;
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name                  VARCHAR;
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS gender                     VARCHAR(1);
+
+    ALTER TABLE favorites DROP CONSTRAINT IF EXISTS favorites_user_id_fkey;
+    ALTER TABLE favorites ADD CONSTRAINT favorites_user_id_fkey
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+
+    CREATE TABLE IF NOT EXISTS alerts (
       id         SERIAL PRIMARY KEY,
-      email      VARCHAR UNIQUE NOT NULL,
-      password   VARCHAR NOT NULL,
+      user_id    INTEGER REFERENCES users(id) ON DELETE CASCADE,
+      name       VARCHAR,
+      keywords   VARCHAR,
+      source     VARCHAR,
+      price_min  FLOAT,
+      price_max  FLOAT,
+      region     VARCHAR,
+      active     BOOLEAN DEFAULT TRUE,
       created_at TIMESTAMP DEFAULT NOW()
     );
 

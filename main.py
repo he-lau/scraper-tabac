@@ -1,6 +1,7 @@
 from scraper.sites.cessionpme import CessionPMEScraper
 from scraper.sites.huarenjie import HuarenjieScraper
 from scraper.normalize import normalize
+from scraper.alert_service import dispatch_alerts
 from db.session import SessionLocal
 from db.models import Listing
 from db.init_db import init_db
@@ -30,6 +31,7 @@ try:
             continue
     
         inserted = 0
+        new_listings = []
         for raw in results:
             dto = normalize(raw)
 
@@ -38,13 +40,13 @@ try:
             if exists:
                 continue
 
-            # listing = Listing(**vars(dto))
             listing = Listing(**dto.__dict__)
-
             db.add(listing)
+            new_listings.append(listing)
             inserted += 1
 
         db.commit()
         logger.success(f"✅ {inserted}/{len(results)} annonces insérées pour {scraper.name}")
+        dispatch_alerts(db, new_listings)
 finally:
     db.close()

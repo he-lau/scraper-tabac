@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LayoutGrid, BarChart2, Menu, LogOut, LogIn, Heart } from "lucide-react";
+import { LayoutGrid, BarChart2, Menu, LogOut, LogIn, Heart, User, Bell } from "lucide-react";
 import { useT } from "../lang/LanguageContext";
 
 const NAV = [
   { key: "listings",   path: "/",          labelKey: "navListings",   icon: <LayoutGrid size={16} /> },
   { key: "stats",      path: "/stats",     labelKey: "navStats",      icon: <BarChart2 size={16} /> },
   { key: "favorites",  path: "/favorites", labelKey: "navFavorites",  icon: <Heart size={16} />, authOnly: true },
+  { key: "alerts",     path: "/alerts",    labelKey: "navAlerts",     icon: <Bell size={16} />,  authOnly: true },
 ];
 
 
@@ -60,7 +61,13 @@ export default function DashboardLayout({ children, title, actions, user, onLogo
         <div className="px-3 pb-2">
           {user ? (
             <div className="flex flex-col gap-1">
-              <p className="text-[11px] text-[#555] font-mono px-3 truncate">{user.email}</p>
+              <Link
+                to="/profile"
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-colors ${pathname === "/profile" ? "bg-white text-[#111]" : "text-[#999] hover:text-white hover:bg-[#1a1a1a] cursor-pointer"}`}
+                onClick={() => setMobileOpen(false)}
+              >
+                <User size={16} />{t.navProfile}
+              </Link>
               <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium text-[#999] hover:text-white hover:bg-[#1a1a1a] cursor-pointer transition-colors"

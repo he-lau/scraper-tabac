@@ -21,5 +21,10 @@ export function useAuth() {
     setUser(null);
   }, []);
 
-  return { token, user, login, logout, isAuthenticated: !!token };
+  const updateUser = useCallback((newUser) => {
+    localStorage.setItem("user", JSON.stringify(newUser));
+    setUser(newUser);
+  }, []);
+
+  return { token, user, login, logout, updateUser, isAuthenticated: !!token };
 }

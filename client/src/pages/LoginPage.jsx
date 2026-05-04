@@ -5,13 +5,30 @@ import { useT } from "../lang/LanguageContext";
 import apiUrl from "../utils/api";
 
 export default function LoginPage({ onLogin }) {
-  const { t } = useT();
+  const { t, lang, toggle } = useT();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resent, setResent] = useState(false);
+
+  const handleResend = async () => {
+    setResending(true);
+    setResent(false);
+    try {
+      await fetch(`${apiUrl}/api/auth/resend-verification`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      setResent(true);
+    } finally {
+      setResending(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,6 +53,17 @@ export default function LoginPage({ onLogin }) {
 
   return (
     <div className="min-h-screen bg-[#F4F4F2] flex items-center justify-center px-4">
+      <div className="fixed top-4 right-4 flex items-center border border-[#D8D8D3] rounded-lg overflow-hidden text-[11px] font-medium">
+        {["fr", "zh"].map((l) => (
+          <button
+            key={l}
+            onClick={() => l !== lang && toggle()}
+            className={`px-2.5 py-1.5 cursor-pointer transition-colors ${lang === l ? "bg-[#111] text-white" : "bg-white text-[#888] hover:text-[#111]"}`}
+          >
+            {l === "fr" ? "FR" : "中文"}
+          </button>
+        ))}
+      </div>
       <div className="bg-white rounded-2xl shadow-sm border border-[#E8E8E3] w-full max-w-sm p-8">
         <p className="text-[10px] font-mono text-[#888] tracking-[0.12em] uppercase mb-1">scraper</p>
         <h1 className="text-[20px] font-semibold tracking-tight">Tabac · Bar · FDJ</h1>
@@ -74,7 +102,25 @@ export default function LoginPage({ onLogin }) {
           </div>
 
           {error && (
-            <p className="text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
+            <div>
+              <p className="text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
+              {error.includes("non vérifié") || error.includes("未验证") ? (
+                <div className="mt-2 text-center">
+                  {resent ? (
+                    <p className="text-[12px] text-green-600">{t.authResent}</p>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleResend}
+                      disabled={resending}
+                      className="text-[12px] text-[#555] underline underline-offset-2 hover:text-[#111] disabled:opacity-50 cursor-pointer"
+                    >
+                      {resending ? t.authResending : t.authResend}
+                    </button>
+                  )}
+                </div>
+              ) : null}
+            </div>
           )}
 
           <button type="submit" disabled={loading} className="btn-primary justify-center mt-1">
