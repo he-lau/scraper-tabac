@@ -76,8 +76,48 @@ const resendVerification = async (req, res) => {
   res.json({ message: "Email de confirmation renvoyé." });
 };
 
-const me = (req, res) => {
-  res.json({ user: req.user });
+const me = async (req, res) => {
+  const user = await userModel.findById(req.user.id);
+  if (!user) return res.status(404).json({ error: "Utilisateur introuvable" });
+  const { password, verification_token, verification_token_expires, ...safe } = user;
+  res.json({ user: safe });
 };
 
-module.exports = { register, login, verifyEmail, resendVerification, me };
+const updateProfile = async (req, res) => {
+  const { firstName, lastName } = req.body;
+  const updated = await userModel.updateProfile(req.user.id, firstName, lastName);
+  res.json({ user: updated });
+};
+
+const changePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  if (!currentPassword || !newPassword) return res.status(400).json({ error: "Champs requis" });
+  if (newPassword.length < 6) return res.status(400).json({ error: "Le mot de passe doit faire au moins 6 caractères" });
+
+  const user = await userModel.findById(req.user.id);
+  const valid = await bcrypt.compare(currentPassword, user.password);
+  if (!valid) return res.status(401).json({ error: "Mot de passe actuel incorrect" });
+
+  const hashed = await bcrypt.hash(newPassword, SALT_ROUNDS);
+  await userModel.updatePassword(req.user.id, hashed);
+  res.json({ message: "Mot de passe mis à jour" });
+};
+
+const deleteAccount = async (req, res) => {
+  try {
+    const { password } = req.body;
+    if (!password) return res.status(400).json({ error: "Mot de passe requis" });
+
+    const user = await userModel.findById(req.user.id);
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) return res.status(401).json({ error: "Mot de passe incorrect" });
+
+    await userModel.deleteUser(req.user.id);
+    res.json({ message: "Compte supprimé" });
+  } catch (err) {
+    console.error("deleteAccount error:", err);
+    res.status(500).json({ error: "Erreur lors de la suppression du compte" });
+  }
+};
+
+module.exports = { register, login, verifyEmail, resendVerification, me, updateProfile, changePassword, deleteAccount };

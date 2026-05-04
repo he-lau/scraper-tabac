@@ -96,4 +96,21 @@ export default {
 
   favEmptyTitle:    "暂无收藏",
   favEmptySubtitle: "点击 ♡ 收藏感兴趣的公告",
+
+  navProfile:           "我的资料",
+  profileTitle:         "我的资料",
+  profileInfo:          "基本信息",
+  profileSave:          "保存",
+  profileSaved:         "修改已保存",
+  profilePassword:      "修改密码",
+  profileCurrentPwd:    "当前密码",
+  profileNewPwd:        "新密码",
+  profileConfirmPwd:    "确认新密码",
+  profilePwdUpdated:    "密码已更新",
+  profileDanger:        "危险操作",
+  profileDeleteAccount: "删除账户",
+  profileDeleteConfirm: "请输入密码以永久删除您的账户。",
+  profileDeleting:      "删除中…",
+  profileSaving:        "保存中…",
+  profileUpdating:      "更新中…",
 };

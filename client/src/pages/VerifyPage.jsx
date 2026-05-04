@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useT } from "../lang/LanguageContext";
@@ -10,8 +10,12 @@ export default function VerifyPage({ onLogin }) {
   const { t } = useT();
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState("");
+  const called = useRef(false);
 
   useEffect(() => {
+    if (called.current) return;
+    called.current = true;
+
     const verify = async () => {
       try {
         const res = await fetch(`${apiUrl}/api/auth/verify/${token}`);

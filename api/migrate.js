@@ -19,6 +19,10 @@ module.exports = async function migrate() {
     ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name                  VARCHAR;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS gender                     VARCHAR(1);
 
+    ALTER TABLE favorites DROP CONSTRAINT IF EXISTS favorites_user_id_fkey;
+    ALTER TABLE favorites ADD CONSTRAINT favorites_user_id_fkey
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+
     CREATE TABLE IF NOT EXISTS favorites (
       id         SERIAL PRIMARY KEY,
       user_id    INTEGER REFERENCES users(id) ON DELETE CASCADE,

@@ -96,4 +96,21 @@ export default {
 
   favEmptyTitle:    "Aucun favori",
   favEmptySubtitle: "Ajoutez des annonces en cliquant sur le ♡",
+
+  navProfile:           "Mon profil",
+  profileTitle:         "Mon profil",
+  profileInfo:          "Informations",
+  profileSave:          "Enregistrer",
+  profileSaved:         "Modifications enregistrées",
+  profilePassword:      "Changer le mot de passe",
+  profileCurrentPwd:    "Mot de passe actuel",
+  profileNewPwd:        "Nouveau mot de passe",
+  profileConfirmPwd:    "Confirmer le nouveau mot de passe",
+  profilePwdUpdated:    "Mot de passe mis à jour",
+  profileDanger:        "Zone de danger",
+  profileDeleteAccount: "Supprimer mon compte",
+  profileDeleteConfirm: "Confirmez votre mot de passe pour supprimer définitivement votre compte.",
+  profileDeleting:      "Suppression…",
+  profileSaving:        "Enregistrement…",
+  profileUpdating:      "Mise à jour…",
 };
