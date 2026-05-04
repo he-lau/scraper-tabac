@@ -17,4 +17,6 @@ RUN chmod 0644 /etc/cron.d/scraper && crontab /etc/cron.d/scraper
 
 COPY . .
 
-CMD ["cron", "-f"]
+RUN chmod +x /app/entrypoint.sh
+
+CMD ["/app/entrypoint.sh"]
