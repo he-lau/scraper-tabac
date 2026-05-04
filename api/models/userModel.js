@@ -20,4 +20,10 @@ const markAsVerified = (id) =>
     [id]
   );
 
-module.exports = { findByEmail, create, findByVerificationToken, markAsVerified };
+const updateVerificationToken = (email, token, expires) =>
+  db.query(
+    "UPDATE users SET verification_token = $2, verification_token_expires = $3 WHERE email = $1",
+    [email, token, expires]
+  );
+
+module.exports = { findByEmail, create, findByVerificationToken, markAsVerified, updateVerificationToken };

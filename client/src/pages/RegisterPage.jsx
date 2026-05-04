@@ -13,6 +13,23 @@ export default function RegisterPage({ onLogin }) {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [sent, setSent] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resent, setResent] = useState(false);
+
+  const handleResend = async () => {
+    setResending(true);
+    setResent(false);
+    try {
+      await fetch(`${apiUrl}/api/auth/resend-verification`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      setResent(true);
+    } finally {
+      setResending(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,7 +60,15 @@ export default function RegisterPage({ onLogin }) {
           <div className="text-4xl mb-4">✉️</div>
           <p className="text-[15px] font-semibold mb-2">{t.authCheckEmail}</p>
           <p className="text-[13px] text-[#888]">{t.authCheckEmailSub} <span className="text-[#111] font-medium">{email}</span></p>
-          <p className="text-center mt-6">
+          <button
+            onClick={handleResend}
+            disabled={resending}
+            className="mt-5 text-[12px] text-[#555] underline underline-offset-2 hover:text-[#111] disabled:opacity-50 cursor-pointer"
+          >
+            {resending ? t.authResending : t.authResend}
+          </button>
+          {resent && <p className="text-[12px] text-green-600 mt-1">{t.authResent}</p>}
+          <p className="text-center mt-4">
             <Link to="/" className="text-[11px] text-[#aaa] hover:text-[#555] transition-colors">
               {t.authContinueWithout}
             </Link>

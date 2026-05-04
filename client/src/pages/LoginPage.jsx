@@ -12,6 +12,23 @@ export default function LoginPage({ onLogin }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resent, setResent] = useState(false);
+
+  const handleResend = async () => {
+    setResending(true);
+    setResent(false);
+    try {
+      await fetch(`${apiUrl}/api/auth/resend-verification`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      setResent(true);
+    } finally {
+      setResending(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -74,7 +91,25 @@ export default function LoginPage({ onLogin }) {
           </div>
 
           {error && (
-            <p className="text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
+            <div>
+              <p className="text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
+              {error.includes("non vérifié") || error.includes("未验证") ? (
+                <div className="mt-2 text-center">
+                  {resent ? (
+                    <p className="text-[12px] text-green-600">{t.authResent}</p>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleResend}
+                      disabled={resending}
+                      className="text-[12px] text-[#555] underline underline-offset-2 hover:text-[#111] disabled:opacity-50 cursor-pointer"
+                    >
+                      {resending ? t.authResending : t.authResend}
+                    </button>
+                  )}
+                </div>
+              ) : null}
+            </div>
           )}
 
           <button type="submit" disabled={loading} className="btn-primary justify-center mt-1">
