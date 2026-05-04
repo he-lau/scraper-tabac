@@ -81,6 +81,7 @@ export default function App() {
   const isStats = pathname === "/stats";
   const isFavorites = pathname === "/favorites";
   const isProfile = pathname === "/profile";
+  const isAlerts = pathname === "/alerts";
 
   const routeProps = {
     listings, loading, error,
@@ -101,7 +102,7 @@ export default function App() {
   }
 
   // actions : actualiser + export csv
-  const headerActions = !isStats && !isFavorites && !isProfile ? (
+  const headerActions = !isStats && !isFavorites && !isProfile && !isAlerts ? (
     <>
       <button className="btn-secondary" onClick={refetch}>
         <RefreshCw size={12} />
@@ -115,7 +116,7 @@ export default function App() {
   ) : null;
 
   return (
-    <DashboardLayout title={isStats ? t.navStats : isFavorites ? t.navFavorites : isProfile ? t.profileTitle : t.navListings} actions={headerActions} user={user} onLogout={logout}>
+    <DashboardLayout title={isStats ? t.navStats : isFavorites ? t.navFavorites : isProfile ? t.profileTitle : isAlerts ? t.alertsTitle : t.navListings} actions={headerActions} user={user} onLogout={logout}>
       <AppRoutes {...routeProps} />
     </DashboardLayout>
   );

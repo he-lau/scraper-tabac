@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LayoutGrid, BarChart2, Menu, LogOut, LogIn, Heart, User } from "lucide-react";
+import { LayoutGrid, BarChart2, Menu, LogOut, LogIn, Heart, User, Bell } from "lucide-react";
 import { useT } from "../lang/LanguageContext";
 
 const NAV = [
   { key: "listings",   path: "/",          labelKey: "navListings",   icon: <LayoutGrid size={16} /> },
   { key: "stats",      path: "/stats",     labelKey: "navStats",      icon: <BarChart2 size={16} /> },
   { key: "favorites",  path: "/favorites", labelKey: "navFavorites",  icon: <Heart size={16} />, authOnly: true },
+  { key: "alerts",     path: "/alerts",    labelKey: "navAlerts",     icon: <Bell size={16} />,  authOnly: true },
 ];
 
 
