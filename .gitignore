@@ -20,3 +20,6 @@ __pycache__/
 
 docker_command.md
 test_db.py
+
+# Infra locale (spécifique au serveur)
+docker-compose.traefik.yml

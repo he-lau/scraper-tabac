@@ -8,6 +8,8 @@ const alertRoutes = require("./routes/alertRoutes");
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(cors({
   origin: process.env.NODE_ENV === "production"
     ? process.env.FRONTEND_URL
